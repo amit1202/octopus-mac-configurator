@@ -2,40 +2,51 @@ import SwiftUI
 
 struct RequiredFieldsView: View {
     @Binding var config: OctopusConfig
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Required Configuration")
                 .font(.title)
                 .fontWeight(.bold)
-            
+
             Text("These fields are required for Octopus to function")
                 .foregroundColor(.secondary)
-            
+
             Form {
                 Section("Server") {
-                    TextField("Server URL", text: $config.server)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
+                    LabeledInputField(
+                        label: "Server URL",
+                        text: $config.server,
+                        placeholder: "https://yourserver.doubleoctopus.io"
+                    )
                 }
 
                 Section("Domain") {
-                    TextField("Domain Name", text: $config.domain)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
+                    LabeledInputField(
+                        label: "Domain Name",
+                        text: $config.domain,
+                        placeholder: "e.g. company.com",
+                        hint: "Your Active Directory or LDAP domain name."
+                    )
                 }
 
                 Section("Service Key") {
-                    TextEditor(text: $config.service)
-                        .frame(height: 100)
-                        .modifier(EmphasizedField())
+                    LabeledTextEditor(
+                        label: "Service Key",
+                        text: $config.service,
+                        height: 100,
+                        hint: "Paste the service key provided by your Octopus server."
+                    )
                 }
 
                 Section("Certificate") {
-                    TextEditor(text: $config.certificate)
-                        .frame(height: 200)
-                        .font(.system(.body, design: .monospaced))
-                        .modifier(EmphasizedField())
+                    LabeledTextEditor(
+                        label: "X.509 Certificate",
+                        text: $config.certificate,
+                        height: 200,
+                        monospaced: true,
+                        hint: "Paste the PEM-encoded public certificate from your Octopus server."
+                    )
                 }
             }
             .formStyle(.grouped)

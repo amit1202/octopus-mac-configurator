@@ -35,19 +35,21 @@ struct DeploymentView: View {
             Form {
                 // ── Source Package ──
                 Section("Source Package") {
-                    HStack {
-                        TextField("Select an Octopus .pkg installer...", text: $selectedPkgPath)
-                            .textFieldStyle(.plain)
-                            .modifier(EmphasizedField())
-                            .disabled(true)
-
-                        Button("Browse...") {
-                            browseForPkg()
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Octopus .pkg Installer")
+                            .font(.callout)
+                            .fontWeight(.medium)
+                        HStack {
+                            TextField("No file selected…", text: $selectedPkgPath)
+                                .textFieldStyle(.plain)
+                                .modifier(EmphasizedField())
+                                .disabled(true)
+                            Button("Browse…") { browseForPkg() }
                         }
+                        Text("Select the original Octopus .pkg installer. The tool will inject your configuration into it.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
-                    Text("Select the original Octopus .pkg installer file. The tool will inject your configuration into it.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                 }
 
                 // ── Configuration ──
@@ -59,12 +61,12 @@ struct DeploymentView: View {
                             .foregroundColor(configIsValid ? .primary : .orange)
                     }
 
-                    TextField("XML Filename", text: $xmlFilename)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
-                    Text("The configuration file will be placed inside the .app bundle at Contents/Resources/")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    LabeledInputField(
+                        label: "XML Filename",
+                        text: $xmlFilename,
+                        placeholder: "octopus-config.xml",
+                        hint: "The configuration file will be placed inside the .app bundle at Contents/Resources/"
+                    )
 
                     Toggle("Save XML copy alongside .pkg", isOn: $saveXmlCopy)
                     Text("When enabled, an extra copy of the XML file is saved next to the output .pkg for reference.")

@@ -16,16 +16,16 @@ struct ServerConnectionView: View {
             Form {
                 // ── Server Settings ──
                 Section("Server Settings") {
-                    TextField("Octopus Server URL", text: $viewModel.octopusServerURL)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
-                    Text("e.g. https://yourserver.doubleoctopus.io")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-
-                    TextField("Admin Email", text: $viewModel.octopusAdminEmail)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
+                    LabeledInputField(
+                        label: "Octopus Server URL",
+                        text: $viewModel.octopusServerURL,
+                        placeholder: "https://yourserver.doubleoctopus.io"
+                    )
+                    LabeledInputField(
+                        label: "Admin Email",
+                        text: $viewModel.octopusAdminEmail,
+                        placeholder: "admin@company.com"
+                    )
                 }
 
                 // ── Authentication ──
@@ -37,9 +37,7 @@ struct ServerConnectionView: View {
                     .pickerStyle(.segmented)
 
                     if viewModel.selectedAuthMethod == .password {
-                        SecureField("Password", text: $viewModel.serverPassword)
-                            .textFieldStyle(.plain)
-                            .modifier(EmphasizedField())
+                        LabeledSecureField(label: "Password", text: $viewModel.serverPassword)
                     } else {
                         Text("A push notification will be sent to your Octopus Authenticator app. Approve it to connect.")
                             .font(.caption)

@@ -18,6 +18,84 @@ struct EmphasizedField: ViewModifier {
     }
 }
 
+// MARK: - Labeled Input Helpers
+
+/// A text field with its label rendered above it (left-aligned).
+struct LabeledInputField: View {
+    let label: String
+    @Binding var text: String
+    var placeholder: String = ""
+    var hint: String = ""
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(.callout)
+                .fontWeight(.medium)
+                .foregroundColor(.primary)
+            TextField(placeholder.isEmpty ? label : placeholder, text: $text)
+                .textFieldStyle(.plain)
+                .modifier(EmphasizedField())
+            if !hint.isEmpty {
+                Text(hint)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+}
+
+/// A secure field with its label rendered above it (left-aligned).
+struct LabeledSecureField: View {
+    let label: String
+    @Binding var text: String
+    var hint: String = ""
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(.callout)
+                .fontWeight(.medium)
+                .foregroundColor(.primary)
+            SecureField(label, text: $text)
+                .textFieldStyle(.plain)
+                .modifier(EmphasizedField())
+            if !hint.isEmpty {
+                Text(hint)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+}
+
+/// A multi-line text editor with its label rendered above it (left-aligned).
+struct LabeledTextEditor: View {
+    let label: String
+    @Binding var text: String
+    var height: CGFloat = 100
+    var monospaced: Bool = false
+    var hint: String = ""
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(.callout)
+                .fontWeight(.medium)
+                .foregroundColor(.primary)
+            TextEditor(text: $text)
+                .frame(height: height)
+                .font(monospaced ? .system(.body, design: .monospaced) : .body)
+                .modifier(EmphasizedField())
+            if !hint.isEmpty {
+                Text(hint)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+}
+
 // MARK: - App Mode
 
 enum AppMode {
@@ -309,24 +387,14 @@ struct BasicModeView: View {
                             }
                         }
 
-                        TextField("e.g. company.com", text: $viewModel.config.domain)
-                            .textFieldStyle(.plain)
-                            .modifier(EmphasizedField())
-
-                        if viewModel.config.domain.isEmpty {
-                            HStack(spacing: 4) {
-                                Image(systemName: "exclamationmark.triangle.fill")
-                                    .foregroundColor(.orange)
-                                    .font(.caption2)
-                                Text("Domain is required. Enter your Active Directory or LDAP domain name.")
-                                    .font(.caption)
-                                    .foregroundColor(.orange)
-                            }
-                        } else {
-                            Text("Active Directory / LDAP domain used for authentication.")
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
+                        LabeledInputField(
+                            label: "Domain Name",
+                            text: $viewModel.config.domain,
+                            placeholder: "e.g. company.com",
+                            hint: viewModel.config.domain.isEmpty
+                                ? "Required — enter your Active Directory or LDAP domain name."
+                                : "Active Directory / LDAP domain used for authentication."
+                        )
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(8)
@@ -590,26 +658,38 @@ struct SSOView: View {
 
             Form {
                 Section("SSO Portal") {
-                    TextField("SSO URL", text: $config.ssourl)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
-                    Picker("SSO Browser", selection: $config.ssobrowser) {
-                        Text("System Default").tag("system")
-                        Text("Safari").tag("safari")
-                        Text("Chrome").tag("chrome")
-                        Text("Firefox").tag("firefox")
+                    LabeledInputField(
+                        label: "SSO URL",
+                        text: $config.ssourl,
+                        placeholder: "https://sso.company.com"
+                    )
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("SSO Browser")
+                            .font(.callout)
+                            .fontWeight(.medium)
+                        Picker("SSO Browser", selection: $config.ssobrowser) {
+                            Text("System Default").tag("system")
+                            Text("Safari").tag("safari")
+                            Text("Chrome").tag("chrome")
+                            Text("Firefox").tag("firefox")
+                        }
+                        .pickerStyle(.menu)
+                        .labelsHidden()
                     }
-                    .pickerStyle(.menu)
                 }
 
                 Section("Advanced") {
                     Toggle("Hide Username in SSO Mode", isOn: $config.hideUserNameInSSOMode)
-                    TextField("SSO Button Caption", text: $config.ssoButtonCaption)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
-                    TextField("IDP Metadata URL", text: $config.idpMetadataURL)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
+                    LabeledInputField(
+                        label: "SSO Button Caption",
+                        text: $config.ssoButtonCaption,
+                        placeholder: "Sign in with SSO"
+                    )
+                    LabeledInputField(
+                        label: "IDP Metadata URL",
+                        text: $config.idpMetadataURL,
+                        placeholder: "https://idp.company.com/metadata"
+                    )
                 }
             }
             .formStyle(.grouped)
@@ -641,12 +721,12 @@ struct PasswordPolicyView: View {
                         .foregroundColor(.secondary)
 
                     if config.forcePasswordRotation {
-                        TextField("Password Rotation Period (days)", text: $config.passwordRotationPeriod)
-                            .textFieldStyle(.plain)
-                            .modifier(EmphasizedField())
-                        Text("Default: 30 days")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        LabeledInputField(
+                            label: "Password Rotation Period (days)",
+                            text: $config.passwordRotationPeriod,
+                            placeholder: "30",
+                            hint: "Default: 30 days"
+                        )
                     }
                 }
             }
@@ -669,12 +749,16 @@ struct SharedAccountsView: View {
                 if config.sharedaccounts {
                     Toggle("Show Shared Account Link", isOn: $config.showSharedAccountLink)
                     Toggle("Default to Regular Account", isOn: $config.defaultToRegularAccount)
-                    TextField("Name for Use Shared Account Link", text: $config.nameForUseSharedAccountLink)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
-                    TextField("Name for Remove Shared Account Link", text: $config.nameForRemoveSharedAccountLink)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
+                    LabeledInputField(
+                        label: "Name for \"Use Shared Account\" Link",
+                        text: $config.nameForUseSharedAccountLink,
+                        placeholder: "Use Shared Account"
+                    )
+                    LabeledInputField(
+                        label: "Name for \"Remove Shared Account\" Link",
+                        text: $config.nameForRemoveSharedAccountLink,
+                        placeholder: "Remove Shared Account"
+                    )
                 }
             }
             .formStyle(.grouped)
@@ -693,24 +777,33 @@ struct OtherSettingsView: View {
 
             Form {
                 Section("Logging") {
-                    Picker("Logging Level", selection: $config.logging) {
-                        Text("None").tag("none")
-                        Text("Error").tag("error")
-                        Text("Info").tag("info")
-                        Text("Debug").tag("debug")
-                        Text("Verbose").tag("verbose")
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Logging Level")
+                            .font(.callout)
+                            .fontWeight(.medium)
+                        Picker("Logging Level", selection: $config.logging) {
+                            Text("None").tag("none")
+                            Text("Error").tag("error")
+                            Text("Info").tag("info")
+                            Text("Debug").tag("debug")
+                            Text("Verbose").tag("verbose")
+                        }
+                        .pickerStyle(.menu)
+                        .labelsHidden()
                     }
-                    .pickerStyle(.menu)
-
-                    TextField("Max Log File Size (KB)", text: $config.maxLogFileSize)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
+                    LabeledInputField(
+                        label: "Max Log File Size (KB)",
+                        text: $config.maxLogFileSize,
+                        placeholder: "e.g. 1024"
+                    )
                 }
 
                 Section("Audit") {
-                    TextField("Max Audit File Size (KB)", text: $config.maxAuditFileSize)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
+                    LabeledInputField(
+                        label: "Max Audit File Size (KB)",
+                        text: $config.maxAuditFileSize,
+                        placeholder: "e.g. 2048"
+                    )
                     Toggle("Send Audit to Server", isOn: $config.sendAuditToServer)
                 }
             }

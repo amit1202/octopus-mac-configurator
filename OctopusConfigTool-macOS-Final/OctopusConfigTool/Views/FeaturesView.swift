@@ -17,9 +17,12 @@ struct FeaturesView: View {
                 }
                 
                 Section("Kerberos") {
-                    TextField("Kerberos Realm", text: $config.kerberosrealm)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
+                    LabeledInputField(
+                        label: "Kerberos Realm",
+                        text: $config.kerberosrealm,
+                        placeholder: "e.g. COMPANY.COM",
+                        hint: "Leave blank to disable Kerberos."
+                    )
                     Toggle("Automatic Kerberos Sync", isOn: $config.automatickerberossync)
                 }
             }

@@ -13,7 +13,7 @@ struct FileVaultView: View {
                 .fontWeight(.bold)
 
             Form {
-                // MARK: - FileVault Enable/Disable at the top
+                // MARK: - FileVault Enable/Disable
                 Section("FileVault") {
                     Toggle("Enable FileVault", isOn: $config.enableFileVault)
                     Text("Enable or disable FileVault disk encryption management.")
@@ -23,32 +23,40 @@ struct FileVaultView: View {
 
                 // MARK: - Deployment Type
                 Section("Deployment Type") {
-                    Picker("FileVault Deployment", selection: $config.fileVaultDeploymentType) {
-                        Text("None").tag("")
-                        Text("Server").tag("server")
-                        Text("Client").tag("client")
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("FileVault Deployment")
+                            .font(.callout)
+                            .fontWeight(.medium)
+                        Picker("FileVault Deployment", selection: $config.fileVaultDeploymentType) {
+                            Text("None").tag("")
+                            Text("Server").tag("server")
+                            Text("Client").tag("client")
+                        }
+                        .pickerStyle(.segmented)
+                        .labelsHidden()
+                        Text("Server: Password managed by server. Client: User creates their own FileVault password.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
                     }
-                    .pickerStyle(.segmented)
-                    Text("Server: Password managed by server. Client: User creates their own FileVault password.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                 }
                 .disabled(!config.enableFileVault)
                 .opacity(config.enableFileVault ? 1.0 : 0.5)
 
                 // MARK: - FileVault Login Settings
                 Section("FileVault Login") {
-                    TextField("FileVault User", text: $config.fileVaultUser)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
+                    LabeledInputField(
+                        label: "FileVault User",
+                        text: $config.fileVaultUser,
+                        placeholder: "e.g. _fvunlock"
+                    )
 
                     if config.fileVaultDeploymentType == "client" {
-                        TextField("FileVault Password/Key", text: $config.fileVault)
-                            .textFieldStyle(.plain)
-                            .modifier(EmphasizedField())
-                        Text("Client mode: user creates their own FileVault password.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        LabeledInputField(
+                            label: "FileVault Password / Key",
+                            text: $config.fileVault,
+                            placeholder: "Client FileVault password",
+                            hint: "Client mode: user creates their own FileVault password."
+                        )
                     }
 
                     Toggle("Auto-Enable FileVault", isOn: $config.autoEnableFileVault)
@@ -59,54 +67,61 @@ struct FileVaultView: View {
                 .disabled(!config.enableFileVault)
                 .opacity(config.enableFileVault ? 1.0 : 0.5)
 
-                // MARK: - Recovery Key (Separate Section)
+                // MARK: - Recovery Key
                 Section("Recovery Key") {
-                    TextField("Recovery Key Location", text: $config.fileVaultRecoveryKey)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
-                    Text("Path where recovery keys are stored on the system.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
+                    LabeledInputField(
+                        label: "Recovery Key Location",
+                        text: $config.fileVaultRecoveryKey,
+                        placeholder: "/var/octopus/recovery",
+                        hint: "Path where recovery keys are stored on the system."
+                    )
 
                     Toggle("Auto-Rotate Recovery Key", isOn: $config.autoRotateRecoveryKey)
 
                     if config.autoRotateRecoveryKey {
-                        TextField("Rotation Command", text: $config.recoveryKeyRotationCommand)
-                            .textFieldStyle(.plain)
-                            .modifier(EmphasizedField())
+                        LabeledInputField(
+                            label: "Rotation Command",
+                            text: $config.recoveryKeyRotationCommand,
+                            placeholder: "sudo fdesetup changerecovery -personal"
+                        )
                     }
 
                     Divider()
 
                     Toggle("Save Recovery Key as File", isOn: $config.recoveryKeySaveAsFile)
                     if config.recoveryKeySaveAsFile {
-                        HStack {
-                            TextField("File Path", text: $config.recoveryKeyFilePath)
-                                .textFieldStyle(.plain)
-                                .modifier(EmphasizedField())
-                            Button("Browse...") {
-                                let panel = NSSavePanel()
-                                panel.title = "Save Recovery Key"
-                                panel.nameFieldStringValue = "recovery-key.txt"
-                                panel.allowedContentTypes = [.plainText]
-                                if panel.runModal() == .OK, let url = panel.url {
-                                    config.recoveryKeyFilePath = url.path
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("File Path")
+                                .font(.callout)
+                                .fontWeight(.medium)
+                            HStack {
+                                TextField("e.g. /var/octopus/recovery-key.txt", text: $config.recoveryKeyFilePath)
+                                    .textFieldStyle(.plain)
+                                    .modifier(EmphasizedField())
+                                Button("Browse…") {
+                                    let panel = NSSavePanel()
+                                    panel.title = "Save Recovery Key"
+                                    panel.nameFieldStringValue = "recovery-key.txt"
+                                    panel.allowedContentTypes = [.plainText]
+                                    if panel.runModal() == .OK, let url = panel.url {
+                                        config.recoveryKeyFilePath = url.path
+                                    }
                                 }
                             }
+                            Text("The recovery key will be saved to this file path.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
                         }
-                        Text("The recovery key will be saved to this file path.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
                     }
 
                     Toggle("Send Recovery Key via Email", isOn: $config.recoveryKeySendEmail)
                     if config.recoveryKeySendEmail {
-                        TextField("Email Address", text: $config.recoveryKeyEmailAddress)
-                            .textFieldStyle(.plain)
-                            .modifier(EmphasizedField())
-                        Text("The recovery key will be sent to this email address.")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
+                        LabeledInputField(
+                            label: "Email Address",
+                            text: $config.recoveryKeyEmailAddress,
+                            placeholder: "admin@company.com",
+                            hint: "The recovery key will be sent to this email address."
+                        )
                     }
                 }
                 .disabled(!config.enableFileVault)
@@ -116,31 +131,30 @@ struct FileVaultView: View {
                 Section("CLI Commands") {
                     HStack {
                         Button("Check FileVault Status") {
-                            Task {
-                                await viewModel.checkFileVaultStatus()
-                            }
+                            Task { await viewModel.checkFileVaultStatus() }
                         }
                         .buttonStyle(.borderedProminent)
 
                         Button("List FileVault Users") {
-                            Task {
-                                await viewModel.listFileVaultUsers()
-                            }
+                            Task { await viewModel.listFileVaultUsers() }
                         }
                         .buttonStyle(.bordered)
                     }
 
                     if viewModel.commandRunner.isRunning {
-                        ProgressView("Executing command...")
+                        ProgressView("Executing command…")
                     }
 
                     if !viewModel.commandRunner.output.isEmpty {
-                        Text("Output:")
-                            .font(.headline)
-                        TextEditor(text: .constant(viewModel.commandRunner.output))
-                            .font(.system(.body, design: .monospaced))
-                            .frame(height: 120)
-                            .modifier(EmphasizedField())
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Output")
+                                .font(.callout)
+                                .fontWeight(.medium)
+                            TextEditor(text: .constant(viewModel.commandRunner.output))
+                                .font(.system(.body, design: .monospaced))
+                                .frame(height: 120)
+                                .modifier(EmphasizedField())
+                        }
                     }
                 }
 
@@ -150,48 +164,50 @@ struct FileVaultView: View {
                         .font(.caption)
                         .foregroundColor(.secondary)
 
-                    HStack {
-                        Picker("Local User", selection: $viewModel.selectedLocalUser) {
-                            if viewModel.localUsers.isEmpty {
-                                Text("No users loaded").tag("")
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Local User")
+                            .font(.callout)
+                            .fontWeight(.medium)
+                        HStack {
+                            Picker("Local User", selection: $viewModel.selectedLocalUser) {
+                                if viewModel.localUsers.isEmpty {
+                                    Text("No users loaded").tag("")
+                                }
+                                ForEach(viewModel.localUsers, id: \.self) { user in
+                                    Text(user).tag(user)
+                                }
                             }
-                            ForEach(viewModel.localUsers, id: \.self) { user in
-                                Text(user).tag(user)
-                            }
-                        }
-                        .pickerStyle(.menu)
-                        .frame(maxWidth: 250)
+                            .pickerStyle(.menu)
+                            .labelsHidden()
+                            .frame(maxWidth: 250)
 
-                        Button("Load Users") {
-                            Task {
-                                await viewModel.loadLocalUsers()
+                            Button("Load Users") {
+                                Task { await viewModel.loadLocalUsers() }
                             }
+                            .buttonStyle(.bordered)
                         }
-                        .buttonStyle(.bordered)
                     }
 
-                    SecureField("User Password", text: $viewModel.localUserPassword)
-                        .textFieldStyle(.plain)
-                        .modifier(EmphasizedField())
-                        .frame(maxWidth: 350)
+                    LabeledSecureField(
+                        label: "User Password",
+                        text: $viewModel.localUserPassword
+                    )
+                    .frame(maxWidth: 350)
 
-                    HStack {
-                        Button("Rotate Recovery Key") {
-                            Task {
-                                await viewModel.rotateRecoveryKey()
-                            }
-                        }
-                        .buttonStyle(.borderedProminent)
-                        .disabled(viewModel.selectedLocalUser.isEmpty || viewModel.localUserPassword.isEmpty)
+                    Button("Rotate Recovery Key") {
+                        Task { await viewModel.rotateRecoveryKey() }
                     }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(viewModel.selectedLocalUser.isEmpty || viewModel.localUserPassword.isEmpty)
 
                     if !viewModel.lastRecoveryKey.isEmpty {
                         Divider()
 
                         VStack(alignment: .leading, spacing: 8) {
-                            HStack {
-                                Text("Recovery Key:")
-                                    .fontWeight(.semibold)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Recovery Key")
+                                    .font(.callout)
+                                    .fontWeight(.medium)
                                 Text(viewModel.lastRecoveryKey)
                                     .font(.system(.body, design: .monospaced))
                                     .textSelection(.enabled)
@@ -231,9 +247,7 @@ struct FileVaultView: View {
         }
         .onAppear {
             if viewModel.localUsers.isEmpty {
-                Task {
-                    await viewModel.loadLocalUsers()
-                }
+                Task { await viewModel.loadLocalUsers() }
             }
         }
     }

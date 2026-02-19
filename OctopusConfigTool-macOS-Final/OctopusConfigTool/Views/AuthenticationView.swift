@@ -200,10 +200,10 @@ struct AuthMethodRow: View {
                     Divider()
 
                     Group {
-                        LabeledField("Method Key", text: $method.method)
-                        LabeledField("Friendly Name", text: $method.methodFriendlyName)
-                        LabeledField("Message", text: $method.message)
-                        LabeledField("Password Hint", text: $method.passwordHint)
+                        LabeledInputField(label: "Method Key", text: $method.method)
+                        LabeledInputField(label: "Friendly Name", text: $method.methodFriendlyName)
+                        LabeledInputField(label: "Message", text: $method.message)
+                        LabeledInputField(label: "Password Hint", text: $method.passwordHint)
                     }
                 }
                 .padding(.leading, 20)
@@ -217,25 +217,3 @@ struct AuthMethodRow: View {
     }
 }
 
-// MARK: - Small helper
-
-private struct LabeledField: View {
-    let label: String
-    @Binding var text: String
-
-    init(_ label: String, text: Binding<String>) {
-        self.label = label
-        self._text = text
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 2) {
-            Text(label)
-                .font(.caption)
-                .foregroundColor(.secondary)
-            TextField(label, text: $text)
-                .textFieldStyle(.plain)
-                .modifier(EmphasizedField())
-        }
-    }
-}
