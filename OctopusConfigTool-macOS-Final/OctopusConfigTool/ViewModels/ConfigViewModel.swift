@@ -126,13 +126,33 @@ class ConfigViewModel: ObservableObject {
         return XMLHandler.generateXML(from: config)
     }
 
-    /// Generates XML with Basic mode defaults applied (non-destructive — uses a copy).
+    /// Generates XML with Basic mode defaults applied (non-destructive — works on a local copy, never touches self.config).
     func generateBasicXML() -> String {
-        let snapshot = config
-        applyBasicDefaults()
-        let xml = XMLHandler.generateXML(from: config)
-        config = snapshot
-        return xml
+        var basicConfig = config
+        // Apply defaults directly to the local copy
+        basicConfig.sudo = false
+        basicConfig.silentsudo = true
+        basicConfig.automatickerberossync = true
+        basicConfig.mfa = false
+        basicConfig.validPasswordIsSufficient = false
+        basicConfig.validPasswordIsSufficientForOffline = false
+        basicConfig.passwordfree = false
+        basicConfig.thirdparty = false
+        basicConfig.customUnlockScreen = false
+        basicConfig.forceLockAfterOfflineLogin = false
+        basicConfig.authenticationMethods = OctopusConfig.standardAuthMethods
+        basicConfig.hideUserNameInSSOMode = false
+        basicConfig.autoPasswordSync = true
+        basicConfig.forcePasswordRotation = false
+        basicConfig.enableFileVault = false
+        basicConfig.autoEnableFileVault = false
+        basicConfig.autoRotateRecoveryKey = false
+        basicConfig.recoveryKeySaveAsFile = false
+        basicConfig.recoveryKeySendEmail = false
+        basicConfig.sharedaccounts = false
+        basicConfig.logging = "info"
+        basicConfig.sendAuditToServer = false
+        return XMLHandler.generateXML(from: basicConfig)
     }
     
     func importXML(from url: URL) {
