@@ -731,6 +731,17 @@ class ConfigViewModel: ObservableObject {
         profiles = profileManager.loadAllProfiles()
     }
 
+    /// Loads the "basic" profile into the active config if one exists.
+    /// Returns true if the profile was found and loaded, false otherwise.
+    @discardableResult
+    func loadBasicProfileIfExists() -> Bool {
+        guard let basicProfile = profiles.first(where: { isBasicProfileName($0.name) }) else {
+            return false
+        }
+        config = basicProfile.config
+        return true
+    }
+
     /// Returns true when a profile name should be treated as a "basic" profile
     /// (server credentials and sensitive fields must be stripped before saving).
     private func isBasicProfileName(_ name: String) -> Bool {

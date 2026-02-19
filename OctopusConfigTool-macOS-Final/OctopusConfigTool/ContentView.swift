@@ -76,6 +76,8 @@ struct ContentView: View {
     @StateObject private var viewModel = ConfigViewModel()
     @State private var appMode: AppMode = .basic
     @State private var selectedTab: AdvancedTab = .server
+    /// Snapshot of config saved when entering Basic mode, restored on exit
+    @State private var advancedConfigSnapshot: OctopusConfig? = nil
 
     var body: some View {
         VStack(spacing: 0) {
@@ -92,6 +94,25 @@ struct ContentView: View {
             }
         }
         .frame(minWidth: 900, minHeight: 700)
+        .onAppear {
+            // On launch, start in Basic mode and auto-load the basic profile if it exists
+            viewModel.loadBasicProfileIfExists()
+        }
+        .onChange(of: appMode) {
+            switch appMode {
+            case .basic:
+                // Snapshot current advanced config so we can restore it later
+                advancedConfigSnapshot = viewModel.config
+                // Load the basic profile into the active config
+                viewModel.loadBasicProfileIfExists()
+            case .advanced:
+                // Restore the advanced config snapshot (or keep current if none)
+                if let snapshot = advancedConfigSnapshot {
+                    viewModel.config = snapshot
+                    advancedConfigSnapshot = nil
+                }
+            }
+        }
         .alert(viewModel.alertTitle, isPresented: $viewModel.showAlert) {
             Button("OK", role: .cancel) { }
         } message: {
