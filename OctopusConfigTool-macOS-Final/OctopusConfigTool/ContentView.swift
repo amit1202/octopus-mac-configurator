@@ -3,40 +3,65 @@ import UniformTypeIdentifiers
 
 // MARK: - Input Field Styling
 
-/// Tracks whether an input field is focused (used for focus-ring highlight).
+// Colours used for the editable field chrome
+private extension Color {
+    /// Resting background — a light blue-grey tint clearly different from the white/grey form bg
+    static let fieldBackground   = Color(red: 0.94, green: 0.97, blue: 1.00)
+    /// Resting border colour
+    static let fieldBorder       = Color(red: 0.65, green: 0.78, blue: 0.95)
+    /// Left-bar colour at rest
+    static let fieldAccentBar    = Color(red: 0.40, green: 0.60, blue: 0.90)
+}
+
+/// Wraps any input control with the "editable field" look:
+/// - Light blue tinted background (clearly distinct from form bg)
+/// - Blue border (1 pt rest, 2 pt accent-blue on focus)
+/// - Blue left accent bar
+/// - Pencil icon in the trailing corner to signal "editable"
 struct InputFieldStyle: ViewModifier {
     @FocusState private var isFocused: Bool
 
     func body(content: Content) -> some View {
-        content
-            .focused($isFocused)
-            .padding(.vertical, 7)
-            .padding(.horizontal, 10)
-            // White input background so it pops against the grey form background
-            .background(Color(NSColor.textBackgroundColor))
-            .cornerRadius(6)
-            .overlay(
-                RoundedRectangle(cornerRadius: 6)
-                    .stroke(
-                        isFocused
-                            ? Color.accentColor
-                            : Color(NSColor.separatorColor),
-                        lineWidth: isFocused ? 2 : 1
-                    )
-            )
-            // Left accent bar — always visible, brightens when focused
-            .overlay(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 3)
-                    .fill(isFocused ? Color.accentColor : Color(NSColor.separatorColor).opacity(0.6))
-                    .frame(width: 3)
-                    .padding(.vertical, 4)
-                    .padding(.leading, 1)
-            }
-            .animation(.easeInOut(duration: 0.15), value: isFocused)
+        HStack(spacing: 0) {
+            content
+                .focused($isFocused)
+                .padding(.vertical, 8)
+                .padding(.leading, 12)
+                .padding(.trailing, 6)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            // Pencil icon — signals the field is editable
+            Image(systemName: "pencil")
+                .font(.caption)
+                .foregroundColor(isFocused ? .accentColor : .fieldAccentBar)
+                .padding(.trailing, 8)
+        }
+        .background(
+            isFocused
+                ? Color.accentColor.opacity(0.08)
+                : Color.fieldBackground
+        )
+        .cornerRadius(7)
+        .overlay(
+            RoundedRectangle(cornerRadius: 7)
+                .stroke(
+                    isFocused ? Color.accentColor : Color.fieldBorder,
+                    lineWidth: isFocused ? 2 : 1.5
+                )
+        )
+        // Left accent bar
+        .overlay(alignment: .leading) {
+            RoundedRectangle(cornerRadius: 3)
+                .fill(isFocused ? Color.accentColor : Color.fieldAccentBar)
+                .frame(width: 4)
+                .padding(.vertical, 3)
+                .padding(.leading, 1)
+        }
+        .animation(.easeInOut(duration: 0.15), value: isFocused)
     }
 }
 
-/// Legacy alias — kept so any remaining `.modifier(EmphasizedField())` still compiles.
+/// Legacy alias so any remaining `.modifier(EmphasizedField())` still compiles.
 typealias EmphasizedField = InputFieldStyle
 
 // MARK: - Labeled Input Helpers
@@ -52,7 +77,7 @@ struct LabeledInputField: View {
         VStack(alignment: .leading, spacing: 5) {
             Text(label)
                 .font(.subheadline)
-                .fontWeight(.medium)
+                .fontWeight(.semibold)
                 .foregroundColor(.primary)
             TextField(placeholder.isEmpty ? label : placeholder, text: $text)
                 .textFieldStyle(.plain)
@@ -77,7 +102,7 @@ struct LabeledSecureField: View {
         VStack(alignment: .leading, spacing: 5) {
             Text(label)
                 .font(.subheadline)
-                .fontWeight(.medium)
+                .fontWeight(.semibold)
                 .foregroundColor(.primary)
             SecureField(label, text: $text)
                 .textFieldStyle(.plain)
@@ -104,26 +129,34 @@ struct LabeledTextEditor: View {
         VStack(alignment: .leading, spacing: 5) {
             Text(label)
                 .font(.subheadline)
-                .fontWeight(.medium)
+                .fontWeight(.semibold)
                 .foregroundColor(.primary)
-            TextEditor(text: $text)
-                .frame(height: height)
-                .font(monospaced ? .system(.body, design: .monospaced) : .body)
-                .padding(.vertical, 4)
-                .padding(.horizontal, 8)
-                .background(Color(NSColor.textBackgroundColor))
-                .cornerRadius(6)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 6)
-                        .stroke(Color(NSColor.separatorColor), lineWidth: 1)
-                )
-                .overlay(alignment: .leading) {
-                    RoundedRectangle(cornerRadius: 3)
-                        .fill(Color(NSColor.separatorColor).opacity(0.6))
-                        .frame(width: 3)
-                        .padding(.vertical, 4)
-                        .padding(.leading, 1)
-                }
+            ZStack(alignment: .topTrailing) {
+                TextEditor(text: $text)
+                    .frame(height: height)
+                    .font(monospaced ? .system(.body, design: .monospaced) : .body)
+                    .padding(.vertical, 6)
+                    .padding(.horizontal, 12)
+                    .scrollContentBackground(.hidden)
+                    .background(Color.fieldBackground)
+                    .cornerRadius(7)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 7)
+                            .stroke(Color.fieldBorder, lineWidth: 1.5)
+                    )
+                    .overlay(alignment: .leading) {
+                        RoundedRectangle(cornerRadius: 3)
+                            .fill(Color.fieldAccentBar)
+                            .frame(width: 4)
+                            .padding(.vertical, 3)
+                            .padding(.leading, 1)
+                    }
+                // Pencil icon top-right
+                Image(systemName: "pencil")
+                    .font(.caption)
+                    .foregroundColor(.fieldAccentBar)
+                    .padding(6)
+            }
             if !hint.isEmpty {
                 Text(hint)
                     .font(.caption)
