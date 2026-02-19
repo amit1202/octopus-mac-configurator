@@ -1,26 +1,47 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-// MARK: - Emphasised Field Modifier
+// MARK: - Input Field Styling
 
-/// Custom modifier that gives text fields a visible border and subtle background
-/// so they stand out against the white window (fixes white-on-white issue).
-struct EmphasizedField: ViewModifier {
+/// Tracks whether an input field is focused (used for focus-ring highlight).
+struct InputFieldStyle: ViewModifier {
+    @FocusState private var isFocused: Bool
+
     func body(content: Content) -> some View {
         content
-            .padding(6)
-            .background(Color(NSColor.controlBackgroundColor))
+            .focused($isFocused)
+            .padding(.vertical, 7)
+            .padding(.horizontal, 10)
+            // White input background so it pops against the grey form background
+            .background(Color(NSColor.textBackgroundColor))
+            .cornerRadius(6)
             .overlay(
                 RoundedRectangle(cornerRadius: 6)
-                    .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                    .stroke(
+                        isFocused
+                            ? Color.accentColor
+                            : Color(NSColor.separatorColor),
+                        lineWidth: isFocused ? 2 : 1
+                    )
             )
-            .cornerRadius(6)
+            // Left accent bar — always visible, brightens when focused
+            .overlay(alignment: .leading) {
+                RoundedRectangle(cornerRadius: 3)
+                    .fill(isFocused ? Color.accentColor : Color(NSColor.separatorColor).opacity(0.6))
+                    .frame(width: 3)
+                    .padding(.vertical, 4)
+                    .padding(.leading, 1)
+            }
+            .animation(.easeInOut(duration: 0.15), value: isFocused)
     }
 }
 
+/// Legacy alias — kept so any remaining `.modifier(EmphasizedField())` still compiles.
+typealias EmphasizedField = InputFieldStyle
+
 // MARK: - Labeled Input Helpers
 
-/// A text field with its label rendered above it (left-aligned).
+/// Label above, text field below — consistent left-aligned layout.
 struct LabeledInputField: View {
     let label: String
     @Binding var text: String
@@ -28,48 +49,50 @@ struct LabeledInputField: View {
     var hint: String = ""
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 5) {
             Text(label)
-                .font(.callout)
+                .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundColor(.primary)
             TextField(placeholder.isEmpty ? label : placeholder, text: $text)
                 .textFieldStyle(.plain)
-                .modifier(EmphasizedField())
+                .modifier(InputFieldStyle())
             if !hint.isEmpty {
                 Text(hint)
                     .font(.caption)
                     .foregroundColor(.secondary)
+                    .padding(.leading, 4)
             }
         }
     }
 }
 
-/// A secure field with its label rendered above it (left-aligned).
+/// Label above, secure field below.
 struct LabeledSecureField: View {
     let label: String
     @Binding var text: String
     var hint: String = ""
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 5) {
             Text(label)
-                .font(.callout)
+                .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundColor(.primary)
             SecureField(label, text: $text)
                 .textFieldStyle(.plain)
-                .modifier(EmphasizedField())
+                .modifier(InputFieldStyle())
             if !hint.isEmpty {
                 Text(hint)
                     .font(.caption)
                     .foregroundColor(.secondary)
+                    .padding(.leading, 4)
             }
         }
     }
 }
 
-/// A multi-line text editor with its label rendered above it (left-aligned).
+/// Label above, multi-line TextEditor below.
 struct LabeledTextEditor: View {
     let label: String
     @Binding var text: String
@@ -78,19 +101,34 @@ struct LabeledTextEditor: View {
     var hint: String = ""
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 5) {
             Text(label)
-                .font(.callout)
+                .font(.subheadline)
                 .fontWeight(.medium)
                 .foregroundColor(.primary)
             TextEditor(text: $text)
                 .frame(height: height)
                 .font(monospaced ? .system(.body, design: .monospaced) : .body)
-                .modifier(EmphasizedField())
+                .padding(.vertical, 4)
+                .padding(.horizontal, 8)
+                .background(Color(NSColor.textBackgroundColor))
+                .cornerRadius(6)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color(NSColor.separatorColor), lineWidth: 1)
+                )
+                .overlay(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 3)
+                        .fill(Color(NSColor.separatorColor).opacity(0.6))
+                        .frame(width: 3)
+                        .padding(.vertical, 4)
+                        .padding(.leading, 1)
+                }
             if !hint.isEmpty {
                 Text(hint)
                     .font(.caption)
                     .foregroundColor(.secondary)
+                    .padding(.leading, 4)
             }
         }
     }
