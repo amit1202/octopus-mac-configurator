@@ -269,6 +269,46 @@ struct BasicModeView: View {
                 GroupBox {
                     ServerConnectionView(config: $viewModel.config, viewModel: viewModel)
                         .padding(8)
+
+                    // Domain field — always shown in Basic mode, required after server load
+                    Divider().padding(.horizontal, 8)
+
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(spacing: 6) {
+                            Label("Domain", systemImage: "building.2.fill")
+                                .font(.headline)
+                            if viewModel.config.domain.isEmpty {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.orange)
+                                    .font(.caption)
+                            } else {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.green)
+                                    .font(.caption)
+                            }
+                        }
+
+                        TextField("e.g. company.com", text: $viewModel.config.domain)
+                            .textFieldStyle(.plain)
+                            .modifier(EmphasizedField())
+
+                        if viewModel.config.domain.isEmpty {
+                            HStack(spacing: 4) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .foregroundColor(.orange)
+                                    .font(.caption2)
+                                Text("Domain is required. Enter your Active Directory or LDAP domain name.")
+                                    .font(.caption)
+                                    .foregroundColor(.orange)
+                            }
+                        } else {
+                            Text("Active Directory / LDAP domain used for authentication.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(8)
                 }
 
                 Divider()
