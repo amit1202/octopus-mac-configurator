@@ -18,78 +18,77 @@ struct EmphasizedField: ViewModifier {
     }
 }
 
+// MARK: - App Mode
+
+enum AppMode {
+    case basic
+    case advanced
+}
+
+// MARK: - Advanced Tab
+
+enum AdvancedTab: Int, CaseIterable {
+    case server = 0
+    case required = 1
+    case features = 2
+    case authentication = 3
+    case fileVault = 4
+    case sso = 5
+    case passwordSync = 6
+    case sharedAccounts = 7
+    case other = 8
+    case deployment = 9
+
+    var label: String {
+        switch self {
+        case .server: return "Server & Import"
+        case .required: return "Required"
+        case .features: return "Features"
+        case .authentication: return "Authentication"
+        case .fileVault: return "FileVault"
+        case .sso: return "SSO"
+        case .passwordSync: return "Password Sync"
+        case .sharedAccounts: return "Shared Accounts"
+        case .other: return "Other"
+        case .deployment: return "Deployment"
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .server: return "cloud.fill"
+        case .required: return "key.fill"
+        case .features: return "star.fill"
+        case .authentication: return "lock.shield.fill"
+        case .fileVault: return "lock.fill"
+        case .sso: return "person.2.fill"
+        case .passwordSync: return "lock.rotation"
+        case .sharedAccounts: return "person.3.fill"
+        case .other: return "gear"
+        case .deployment: return "shippingbox.fill"
+        }
+    }
+}
+
+// MARK: - Content View
+
 struct ContentView: View {
     @StateObject private var viewModel = ConfigViewModel()
-    @State private var selectedTab: Int? = 0
+    @State private var appMode: AppMode = .basic
+    @State private var selectedTab: AdvancedTab = .server
 
     var body: some View {
-        NavigationSplitView {
-            // Sidebar
-            List(selection: $selectedTab) {
-                Label("Required", systemImage: "key.fill")
-                    .tag(0)
-                Label("Features", systemImage: "star.fill")
-                    .tag(1)
-                Label("Authentication", systemImage: "lock.shield.fill")
-                    .tag(2)
-                Label("FileVault", systemImage: "lock.fill")
-                    .tag(3)
-                Label("SSO", systemImage: "person.2.fill")
-                    .tag(4)
-                Label("Password Sync", systemImage: "lock.rotation")
-                    .tag(5)
-                Label("Shared Accounts", systemImage: "person.3.fill")
-                    .tag(6)
-                Label("Other", systemImage: "gear")
-                    .tag(7)
+        VStack(spacing: 0) {
+            // Top bar: logo + title + mode picker + actions
+            TopBarView(viewModel: viewModel, appMode: $appMode)
 
-                Divider()
+            Divider()
 
-                Label("Server", systemImage: "cloud.fill")
-                    .tag(9)
-                Label("Deployment", systemImage: "shippingbox.fill")
-                    .tag(8)
-            }
-            .listStyle(.sidebar)
-            .frame(minWidth: 220)
-        } detail: {
-            // Main Content
-            VStack(spacing: 0) {
-                // Header
-                HeaderView(viewModel: viewModel)
-
-                Divider()
-
-                // Content
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 20) {
-                        switch selectedTab {
-                        case 0:
-                            RequiredFieldsView(config: $viewModel.config)
-                        case 1:
-                            FeaturesView(config: $viewModel.config)
-                        case 2:
-                            AuthenticationView(config: $viewModel.config, viewModel: viewModel)
-                        case 3:
-                            FileVaultView(config: $viewModel.config, viewModel: viewModel)
-                        case 4:
-                            SSOView(config: $viewModel.config)
-                        case 5:
-                            PasswordPolicyView(config: $viewModel.config)
-                        case 6:
-                            SharedAccountsView(config: $viewModel.config)
-                        case 7:
-                            OtherSettingsView(config: $viewModel.config)
-                        case 8:
-                            DeploymentView(config: $viewModel.config, viewModel: viewModel)
-                        case 9:
-                            ServerConnectionView(config: $viewModel.config, viewModel: viewModel)
-                        default:
-                            Text("Select a section")
-                        }
-                    }
-                    .padding()
-                }
+            // Body
+            if appMode == .basic {
+                BasicModeView(viewModel: viewModel)
+            } else {
+                AdvancedModeView(viewModel: viewModel, selectedTab: $selectedTab)
             }
         }
         .frame(minWidth: 900, minHeight: 700)
@@ -136,18 +135,21 @@ struct ContentView: View {
     }
 }
 
-struct HeaderView: View {
+// MARK: - Top Bar
+
+struct TopBarView: View {
     @ObservedObject var viewModel: ConfigViewModel
-    @State private var showingImportXML = false
+    @Binding var appMode: AppMode
+
     var body: some View {
-        HStack {
+        HStack(spacing: 12) {
+            // Logo + title
             Image("sdo-logo-blue-icon")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(height: 36)
                 .clipShape(RoundedRectangle(cornerRadius: 6))
-                .padding(.trailing, 6)
-            
+
             Text("Octopus Config Tool")
                 .font(.title2)
                 .fontWeight(.bold)
@@ -165,35 +167,23 @@ struct HeaderView: View {
 
             Spacer()
 
+            // Basic / Advanced picker
+            Picker("Mode", selection: $appMode) {
+                Text("Basic").tag(AppMode.basic)
+                Text("Advanced").tag(AppMode.advanced)
+            }
+            .pickerStyle(.segmented)
+            .frame(width: 180)
+            .help("Basic: quick setup with defaults. Advanced: full control over all settings.")
+
+            Divider().frame(height: 20)
+
             // Profiles menu
             ProfilesMenuView(viewModel: viewModel)
 
-            Divider()
-                .frame(height: 20)
+            Divider().frame(height: 20)
 
-            // Import XML
-            Button(action: { showingImportXML = true }) {
-                Label("Import XML", systemImage: "square.and.arrow.down")
-            }
-            .fileImporter(
-                isPresented: $showingImportXML,
-                allowedContentTypes: [UTType.xml],
-                allowsMultipleSelection: false
-            ) { result in
-                switch result {
-                case .success(let urls):
-                    guard let url = urls.first else { return }
-                    // Request access to the file
-                    if url.startAccessingSecurityScopedResource() {
-                        defer { url.stopAccessingSecurityScopedResource() }
-                        viewModel.importXML(from: url)
-                    }
-                case .failure(let error):
-                    viewModel.showErrorAlert("Failed to select file: \(error.localizedDescription)")
-                }
-            }
-            
-            // Export XML (NSSavePanel with custom name/path)
+            // Export XML
             Button(action: { viewModel.exportXMLWithPanel() }) {
                 Label("Export XML", systemImage: "square.and.arrow.up")
             }
@@ -202,23 +192,231 @@ struct HeaderView: View {
             Button(action: { viewModel.validateXML() }) {
                 Label("Validate", systemImage: "checkmark.shield")
             }
-            
         }
-        .padding()
+        .padding(.horizontal)
+        .padding(.vertical, 10)
         .background(Color(NSColor.controlBackgroundColor))
     }
 }
 
-// Document wrappers for fileExporter
+// MARK: - Basic Mode
+
+struct BasicModeView: View {
+    @ObservedObject var viewModel: ConfigViewModel
+    @State private var showingImportXML = false
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+
+                // Description
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Quick Setup")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    Text("Connect to your Octopus server or import an XML file. All feature settings will use recommended defaults.")
+                        .foregroundColor(.secondary)
+                }
+
+                Divider()
+
+                // Section 1: Import XML
+                GroupBox {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Label("Import Configuration XML", systemImage: "square.and.arrow.down")
+                            .font(.headline)
+
+                        Text("If you have an existing configuration XML file, import it here to load all settings.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        Button(action: { showingImportXML = true }) {
+                            Label("Choose XML File…", systemImage: "doc.badge.plus")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .fileImporter(
+                            isPresented: $showingImportXML,
+                            allowedContentTypes: [UTType.xml],
+                            allowsMultipleSelection: false
+                        ) { result in
+                            switch result {
+                            case .success(let urls):
+                                guard let url = urls.first else { return }
+                                if url.startAccessingSecurityScopedResource() {
+                                    defer { url.stopAccessingSecurityScopedResource() }
+                                    viewModel.importXML(from: url)
+                                }
+                            case .failure(let error):
+                                viewModel.showErrorAlert("Failed to select file: \(error.localizedDescription)")
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(8)
+                }
+
+                // Divider between import and server
+                HStack {
+                    Rectangle().frame(height: 1).foregroundColor(.secondary.opacity(0.3))
+                    Text("or connect to a server")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                    Rectangle().frame(height: 1).foregroundColor(.secondary.opacity(0.3))
+                }
+
+                // Section 2: Server Connection (reuses the full ServerConnectionView)
+                GroupBox {
+                    ServerConnectionView(config: $viewModel.config, viewModel: viewModel)
+                        .padding(8)
+                }
+
+                // Info about Basic mode defaults
+                GroupBox {
+                    HStack(alignment: .top, spacing: 10) {
+                        Image(systemName: "info.circle.fill")
+                            .foregroundColor(.accentColor)
+                            .font(.title3)
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Basic Mode Defaults")
+                                .fontWeight(.semibold)
+                            Text("When you export or deploy in Basic mode, all feature settings (Authentication, FileVault, SSO, etc.) will use the recommended defaults. Switch to Advanced mode to customise individual settings.")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(8)
+                }
+            }
+            .padding(24)
+        }
+    }
+}
+
+// MARK: - Advanced Mode
+
+struct AdvancedModeView: View {
+    @ObservedObject var viewModel: ConfigViewModel
+    @Binding var selectedTab: AdvancedTab
+
+    var body: some View {
+        NavigationSplitView {
+            List(AdvancedTab.allCases, id: \.self, selection: $selectedTab) { tab in
+                Label(tab.label, systemImage: tab.icon)
+                    .tag(tab)
+            }
+            .listStyle(.sidebar)
+            .frame(minWidth: 200)
+        } detail: {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    advancedContent(for: selectedTab)
+                }
+                .padding()
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func advancedContent(for tab: AdvancedTab) -> some View {
+        switch tab {
+        case .server:
+            AdvancedServerImportView(viewModel: viewModel)
+        case .required:
+            RequiredFieldsView(config: $viewModel.config)
+        case .features:
+            FeaturesView(config: $viewModel.config)
+        case .authentication:
+            AuthenticationView(config: $viewModel.config, viewModel: viewModel)
+        case .fileVault:
+            FileVaultView(config: $viewModel.config, viewModel: viewModel)
+        case .sso:
+            SSOView(config: $viewModel.config)
+        case .passwordSync:
+            PasswordPolicyView(config: $viewModel.config)
+        case .sharedAccounts:
+            SharedAccountsView(config: $viewModel.config)
+        case .other:
+            OtherSettingsView(config: $viewModel.config)
+        case .deployment:
+            DeploymentView(config: $viewModel.config, viewModel: viewModel)
+        }
+    }
+}
+
+// MARK: - Advanced: Server & Import tab
+
+struct AdvancedServerImportView: View {
+    @ObservedObject var viewModel: ConfigViewModel
+    @State private var showingImportXML = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 20) {
+
+            Text("Server & Import")
+                .font(.title)
+                .fontWeight(.bold)
+
+            // Import XML card
+            GroupBox {
+                VStack(alignment: .leading, spacing: 12) {
+                    Label("Import Configuration XML", systemImage: "square.and.arrow.down")
+                        .font(.headline)
+
+                    Text("Load all settings from an existing XML configuration file.")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+
+                    Button(action: { showingImportXML = true }) {
+                        Label("Choose XML File…", systemImage: "doc.badge.plus")
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .fileImporter(
+                        isPresented: $showingImportXML,
+                        allowedContentTypes: [UTType.xml],
+                        allowsMultipleSelection: false
+                    ) { result in
+                        switch result {
+                        case .success(let urls):
+                            guard let url = urls.first else { return }
+                            if url.startAccessingSecurityScopedResource() {
+                                defer { url.stopAccessingSecurityScopedResource() }
+                                viewModel.importXML(from: url)
+                            }
+                        case .failure(let error):
+                            viewModel.showErrorAlert("Failed to select file: \(error.localizedDescription)")
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(8)
+            }
+
+            HStack {
+                Rectangle().frame(height: 1).foregroundColor(.secondary.opacity(0.3))
+                Text("or connect to a server")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Rectangle().frame(height: 1).foregroundColor(.secondary.opacity(0.3))
+            }
+
+            // Server connection (full view)
+            ServerConnectionView(config: $viewModel.config, viewModel: viewModel)
+        }
+    }
+}
+
+// MARK: - Document wrappers for fileExporter
+
 struct XMLDocument: FileDocument {
     static var readableContentTypes: [UTType] { [.xml] }
-    
+
     var xml: String
-    
+
     init(xml: String) {
         self.xml = xml
     }
-    
+
     init(configuration: ReadConfiguration) throws {
         guard let data = configuration.file.regularFileContents,
               let string = String(data: data, encoding: .utf8)
@@ -227,7 +425,7 @@ struct XMLDocument: FileDocument {
         }
         xml = string
     }
-    
+
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
         let data = xml.data(using: .utf8)!
         return .init(regularFileWithContents: data)
@@ -236,20 +434,20 @@ struct XMLDocument: FileDocument {
 
 struct JSONDocument: FileDocument {
     static var readableContentTypes: [UTType] { [.json] }
-    
+
     var config: OctopusConfig
-    
+
     init(config: OctopusConfig) {
         self.config = config
     }
-    
+
     init(configuration: ReadConfiguration) throws {
         guard let data = configuration.file.regularFileContents else {
             throw CocoaError(.fileReadCorruptFile)
         }
         config = try JSONDecoder().decode(OctopusConfig.self, from: data)
     }
-    
+
     func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
         let encoder = JSONEncoder()
         encoder.outputFormatting = .prettyPrinted
@@ -258,7 +456,8 @@ struct JSONDocument: FileDocument {
     }
 }
 
-// Additional View Components
+// MARK: - Additional View Components (SSO, Password, Shared Accounts, Other)
+
 struct SSOView: View {
     @Binding var config: OctopusConfig
 
@@ -337,13 +536,13 @@ struct PasswordPolicyView: View {
 
 struct SharedAccountsView: View {
     @Binding var config: OctopusConfig
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text("Shared Accounts")
                 .font(.title)
                 .fontWeight(.bold)
-            
+
             Form {
                 Toggle("Enable Shared Accounts", isOn: $config.sharedaccounts)
                 if config.sharedaccounts {
@@ -398,4 +597,3 @@ struct OtherSettingsView: View {
         }
     }
 }
-

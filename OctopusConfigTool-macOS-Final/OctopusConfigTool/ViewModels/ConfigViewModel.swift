@@ -78,10 +78,63 @@ class ConfigViewModel: ObservableObject {
         loadProfiles()
     }
 
+    // MARK: - Basic Mode
+
+    /// Applies all recommended default values for Basic mode.
+    /// Call this before exporting/deploying when the user is in Basic mode.
+    func applyBasicDefaults() {
+        // Features
+        config.sudo = false
+        config.silentsudo = true
+        config.automatickerberossync = true
+
+        // Authentication
+        config.mfa = false
+        config.validPasswordIsSufficient = false
+        config.validPasswordIsSufficientForOffline = false
+        config.passwordfree = false
+        config.thirdparty = false
+        config.customUnlockScreen = false
+        config.forceLockAfterOfflineLogin = false
+        config.authenticationMethods = OctopusConfig.standardAuthMethods
+
+        // SSO — cleared by default
+        config.hideUserNameInSSOMode = false
+
+        // Password Sync
+        config.autoPasswordSync = true
+        config.forcePasswordRotation = false
+
+        // FileVault
+        config.enableFileVault = false
+        config.autoEnableFileVault = false
+        config.autoRotateRecoveryKey = false
+        config.recoveryKeySaveAsFile = false
+        config.recoveryKeySendEmail = false
+
+        // Shared accounts
+        config.sharedaccounts = false
+
+        // Other
+        config.logging = "info"
+        config.sendAuditToServer = false
+    }
+
     // MARK: - XML Operations
-    
+
     func generateXML() -> String {
         return XMLHandler.generateXML(from: config)
+    }
+
+    /// Generates XML with Basic mode defaults applied (non-destructive — uses a copy).
+    func generateBasicXML() -> String {
+        var basicConfig = config
+        let snapshot = config
+        applyBasicDefaults()
+        let xml = XMLHandler.generateXML(from: config)
+        config = snapshot
+        _ = basicConfig // suppress unused warning
+        return xml
     }
     
     func importXML(from url: URL) {
