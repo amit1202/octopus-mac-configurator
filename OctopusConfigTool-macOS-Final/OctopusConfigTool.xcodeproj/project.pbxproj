@@ -1,0 +1,408 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F1A2B3C4D5E6F708192A3B4C /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = F2B3C4D5E6F70819A2A3B4C5 /* AppIcon.icns */; };
+		0CDEEFA20CFF4E5F9CF7A5DF /* XMLParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E7B34B5462143409CA25C0A /* XMLParser.swift */; };
+		294414A8962B4649ABC7B876 /* FeaturesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5546458DD5F94399BA427B7B /* FeaturesView.swift */; };
+		2CD28D69B1EB4B9F8E5D52B3 /* XMLHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C855DBD45CBC4053A75C50EA /* XMLHandler.swift */; };
+		50C436855BD240B9B257EBAC /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD1FE3C1FCB24B32BC837ED4 /* ContentView.swift */; };
+		618031A5823849F4BE7C6A64 /* ConfigViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C45B35F80456461B8E0B1385 /* ConfigViewModel.swift */; };
+		665D5E1B06EC438CAFED29FA /* FileVaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4FE6C88EB61421A913332B6 /* FileVaultView.swift */; };
+		983A1A162F335A5D00A69871 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4D5B97CB18814AAE8EE2FF38 /* Assets.xcassets */; };
+		B0C59FF72A2D45BB905F2307 /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BCF514812F44CEB0B69286 /* AuthenticationView.swift */; };
+		B49F43EF829843D2BDA638C7 /* OctopusConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CA6684593F1475EAC4C194D /* OctopusConfig.swift */; };
+		C462F8E191324832B75EF392 /* OctopusConfigToolApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 260CD52E33914AE6BB4FF086 /* OctopusConfigToolApp.swift */; };
+		C57CFC4662A043BFA92139F7 /* CommandRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4729763B18A5474B9DE5681D /* CommandRunner.swift */; };
+		C5DEE74DD706481781B37048 /* RequiredFieldsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B12120ADC92343E89D59597C /* RequiredFieldsView.swift */; };
+		D7A1B2C3E4F506A7B8C9D0E1 /* DeploymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F2A3B4C5D607E8F9A0B1C2 /* DeploymentView.swift */; };
+		A1B2C3D4E5F60718293A4B5C /* OctopusAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6071829A3B4C5D6 /* OctopusAPIClient.swift */; };
+		C3D4E5F607182930A1B2C3D4 /* ServerConnectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F60718293041B2C3D4E5 /* ServerConnectionView.swift */; };
+		B2C3D4E5F6A7B8C9D0E1F2A3 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F2 /* Profile.swift */; };
+		D4E5F6A7B8C9D0E1F2A3B4C5 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D4E5F6A7B8C9D0E1F2A3B4 /* ProfileManager.swift */; };
+		F6A7B8C9D0E1F2A3B4C5D6E7 /* ProfilesMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5F6A7B8C9D0E1F2A3B4C5D6 /* ProfilesMenuView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1CA6684593F1475EAC4C194D /* OctopusConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctopusConfig.swift; sourceTree = "<group>"; };
+		260CD52E33914AE6BB4FF086 /* OctopusConfigToolApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctopusConfigToolApp.swift; sourceTree = "<group>"; };
+		4729763B18A5474B9DE5681D /* CommandRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandRunner.swift; sourceTree = "<group>"; };
+		4D5B97CB18814AAE8EE2FF38 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		54CC1016D6A246FB9E62A0B2 /* OctopusConfigTool.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OctopusConfigTool.entitlements; sourceTree = "<group>"; };
+		5546458DD5F94399BA427B7B /* FeaturesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesView.swift; sourceTree = "<group>"; };
+		57B67DB27982400EB9DA6C2F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6E7B34B5462143409CA25C0A /* XMLParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLParser.swift; sourceTree = "<group>"; };
+		98BCF514812F44CEB0B69286 /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		A4FE6C88EB61421A913332B6 /* FileVaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileVaultView.swift; sourceTree = "<group>"; };
+		B12120ADC92343E89D59597C /* RequiredFieldsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequiredFieldsView.swift; sourceTree = "<group>"; };
+		BD1FE3C1FCB24B32BC837ED4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		C45B35F80456461B8E0B1385 /* ConfigViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewModel.swift; sourceTree = "<group>"; };
+		C4DD1E1294EA438A82807754 /* OctopusConfigTool.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OctopusConfigTool.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C855DBD45CBC4053A75C50EA /* XMLHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XMLHandler.swift; sourceTree = "<group>"; };
+		E8F2A3B4C5D607E8F9A0B1C2 /* DeploymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeploymentView.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6071829A3B4C5D6 /* OctopusAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OctopusAPIClient.swift; sourceTree = "<group>"; };
+		D4E5F60718293041B2C3D4E5 /* ServerConnectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerConnectionView.swift; sourceTree = "<group>"; };
+		F2B3C4D5E6F70819A2A3B4C5 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A7B8C9D0E1F2 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
+		C3D4E5F6A7B8C9D0E1F2A3B4 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
+		E5F6A7B8C9D0E1F2A3B4C5D6 /* ProfilesMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilesMenuView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		9111F953BC4A467BA9297BD5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0CC34646EAFB4838842DF322 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				1CA6684593F1475EAC4C194D /* OctopusConfig.swift */,
+				A1B2C3D4E5F6A7B8C9D0E1F2 /* Profile.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1AAFB5741D9F4E3C8C9D7AA2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C4DD1E1294EA438A82807754 /* OctopusConfigTool.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3A120A23924743958CC848CB = {
+			isa = PBXGroup;
+			children = (
+				78074225EF9646E19F893966 /* OctopusConfigTool */,
+				1AAFB5741D9F4E3C8C9D7AA2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		78074225EF9646E19F893966 /* OctopusConfigTool */ = {
+			isa = PBXGroup;
+			children = (
+				260CD52E33914AE6BB4FF086 /* OctopusConfigToolApp.swift */,
+				BD1FE3C1FCB24B32BC837ED4 /* ContentView.swift */,
+				0CC34646EAFB4838842DF322 /* Models */,
+				D9C5BDE7902C4381965F1573 /* Views */,
+				D43DE78ED2784EEB9A6FD054 /* ViewModels */,
+				9B530CAB5A544702BDD9DF52 /* Utilities */,
+				4D5B97CB18814AAE8EE2FF38 /* Assets.xcassets */,
+				57B67DB27982400EB9DA6C2F /* Info.plist */,
+				54CC1016D6A246FB9E62A0B2 /* OctopusConfigTool.entitlements */,
+				F2B3C4D5E6F70819A2A3B4C5 /* AppIcon.icns */,
+			);
+			path = OctopusConfigTool;
+			sourceTree = "<group>";
+		};
+		9B530CAB5A544702BDD9DF52 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				C855DBD45CBC4053A75C50EA /* XMLHandler.swift */,
+				6E7B34B5462143409CA25C0A /* XMLParser.swift */,
+				4729763B18A5474B9DE5681D /* CommandRunner.swift */,
+				B2C3D4E5F6071829A3B4C5D6 /* OctopusAPIClient.swift */,
+				C3D4E5F6A7B8C9D0E1F2A3B4 /* ProfileManager.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		D43DE78ED2784EEB9A6FD054 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				C45B35F80456461B8E0B1385 /* ConfigViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		D9C5BDE7902C4381965F1573 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B12120ADC92343E89D59597C /* RequiredFieldsView.swift */,
+				5546458DD5F94399BA427B7B /* FeaturesView.swift */,
+				98BCF514812F44CEB0B69286 /* AuthenticationView.swift */,
+				A4FE6C88EB61421A913332B6 /* FileVaultView.swift */,
+				E8F2A3B4C5D607E8F9A0B1C2 /* DeploymentView.swift */,
+				D4E5F60718293041B2C3D4E5 /* ServerConnectionView.swift */,
+				E5F6A7B8C9D0E1F2A3B4C5D6 /* ProfilesMenuView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		72BCF6609C884A9AAD21D7CE /* OctopusConfigTool */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5B30F379A467473AAA7D5141 /* Build configuration list for PBXNativeTarget "OctopusConfigTool" */;
+			buildPhases = (
+				9B36A419151C4D36A58ED262 /* Sources */,
+				9111F953BC4A467BA9297BD5 /* Frameworks */,
+				111EEFCB599F4FE4A5D46233 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = OctopusConfigTool;
+			productName = OctopusConfigTool;
+			productReference = C4DD1E1294EA438A82807754 /* OctopusConfigTool.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7729E70CA25D491982ADD877 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				KnownAssetTags = (
+					New,
+					sdologo,
+				);
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 2620;
+			};
+			buildConfigurationList = 4E5FD68A80104D0884237ABF /* Build configuration list for PBXProject "OctopusConfigTool" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3A120A23924743958CC848CB;
+			productRefGroup = 1AAFB5741D9F4E3C8C9D7AA2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				72BCF6609C884A9AAD21D7CE /* OctopusConfigTool */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		111EEFCB599F4FE4A5D46233 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				983A1A162F335A5D00A69871 /* Assets.xcassets in Resources */,
+				F1A2B3C4D5E6F708192A3B4C /* AppIcon.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		9B36A419151C4D36A58ED262 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C462F8E191324832B75EF392 /* OctopusConfigToolApp.swift in Sources */,
+				50C436855BD240B9B257EBAC /* ContentView.swift in Sources */,
+				B49F43EF829843D2BDA638C7 /* OctopusConfig.swift in Sources */,
+				618031A5823849F4BE7C6A64 /* ConfigViewModel.swift in Sources */,
+				2CD28D69B1EB4B9F8E5D52B3 /* XMLHandler.swift in Sources */,
+				0CDEEFA20CFF4E5F9CF7A5DF /* XMLParser.swift in Sources */,
+				C57CFC4662A043BFA92139F7 /* CommandRunner.swift in Sources */,
+				C5DEE74DD706481781B37048 /* RequiredFieldsView.swift in Sources */,
+				294414A8962B4649ABC7B876 /* FeaturesView.swift in Sources */,
+				B0C59FF72A2D45BB905F2307 /* AuthenticationView.swift in Sources */,
+				665D5E1B06EC438CAFED29FA /* FileVaultView.swift in Sources */,
+				D7A1B2C3E4F506A7B8C9D0E1 /* DeploymentView.swift in Sources */,
+				A1B2C3D4E5F60718293A4B5C /* OctopusAPIClient.swift in Sources */,
+				C3D4E5F607182930A1B2C3D4 /* ServerConnectionView.swift in Sources */,
+				B2C3D4E5F6A7B8C9D0E1F2A3 /* Profile.swift in Sources */,
+				D4E5F6A7B8C9D0E1F2A3B4C5 /* ProfileManager.swift in Sources */,
+				F6A7B8C9D0E1F2A3B4C5D6E7 /* ProfilesMenuView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		2A65B95BCB3E439C8728F460 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		47169F82BB4C41EDAF4A03E0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		9819A0112F267A0C00DF873A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_TEAM = "";
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INFOPLIST_FILE = "/Users/amitl/Octopus for mac configurator/OctopusConfigTool-macOS-Final/OctopusConfigTool/info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Octopus Desk for Mac Configurator";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Secret Double Octopus | All Rights Reserved.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				MARKETING_VERSION = 1.0.0;
+				CURRENT_PROJECT_VERSION = 1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sdo.OctopusConfigTool";
+				PRODUCT_NAME = OctopusConfigTool;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+		9819A0122F267A0C00DF873A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = "";
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				EMBED_ASSET_PACKS_IN_PRODUCT_BUNDLE = YES;
+				INFOPLIST_FILE = "/Users/amitl/Octopus for mac configurator/OctopusConfigTool-macOS-Final/OctopusConfigTool/info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Octopus Desk for Mac Configurator";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "© 2026 Secret Double Octopus | All Rights Reserved.";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				MARKETING_VERSION = 1.0.0;
+				CURRENT_PROJECT_VERSION = 1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sdo.OctopusConfigTool";
+				PRODUCT_NAME = OctopusConfigTool;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4E5FD68A80104D0884237ABF /* Build configuration list for PBXProject "OctopusConfigTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				47169F82BB4C41EDAF4A03E0 /* Debug */,
+				2A65B95BCB3E439C8728F460 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5B30F379A467473AAA7D5141 /* Build configuration list for PBXNativeTarget "OctopusConfigTool" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9819A0112F267A0C00DF873A /* Debug */,
+				9819A0122F267A0C00DF873A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 7729E70CA25D491982ADD877 /* Project object */;
+}

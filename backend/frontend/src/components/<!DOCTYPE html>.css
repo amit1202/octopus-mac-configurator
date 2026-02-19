@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Base - Secret Double Octopus</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #5782c2;
+            --primary-dark: #436ea6;
+            --secondary-color: #f8f9fa;
+            --accent-color: #e3f2fd;
+            --text-primary: #2c3e50;
+            --text-secondary: #6c757d;
+            --border-color: #e9ecef;
+            --shadow-light: 0 2px 4px rgba(0,0,0,0.1);
+            --shadow-medium: 0 4px 6px rgba(0,0,0,0.1);
+            --shadow-heavy: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+            padding-top: 0;
+        }
+
+
+        /* Skip to content styling */
+        .bg-light {
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-dark) 100%) !important;
+        }
+
+        .visually-hidden-focusable:focus {
+            background: var(--primary-color);
+            color: white;
+            border-color: white;
+            box-shadow: 0 0 0 3px rgba(87, 130, 194, 0.3);
+        }
+
+        /* Enhanced Navbar */
+        .navbar {
+            padding: 1rem 0;
+            min-height: 80px;
+            align-items: center;
+        }
+
+        .navbar-brand,
+        .fw-nav-wrapper a[href*="linkback"],
+        .fw-nav-wrapper .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .navbar-brand:hover,
+        .fw-nav-wrapper a[href*="linkback"]:hover,
+        .fw-nav-wrapper .navbar-brand:hover {
+            color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .navbar-brand img,
+        .fw-nav-wrapper .navbar-brand img {
+            height: 40px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover img,
+        .fw-nav-wrapper .navbar-brand:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Enhanced Navigation Links */
+        .navbar-nav .nav-link {
+            font-weight: 500;
+            color: var(--text-primary);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: relative;
+            margin: 0 0.25rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .navbar-nav .nav-link:not([href*="filecloudonline"])::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .navbar-nav .nav-link:not([href*="filecloudonline"]):hover {
+            color: var(--primary-color);
+            background: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        .navbar-nav .nav-link:not([href*="filecloudonline"]):hover::before {
+            width: 80%;
+        }
+
+        /* Active navigation item */
+        .navbar-nav .nav-item.active .nav-link:not([href*="filecloudonline"]) {
+            color: var(--primary-color);
+            background: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .navbar-nav .nav-item.active .nav-link:not([href*="filecloudonline"])::before {
+            width: 100%;
+        }
+
+        /* Enhanced Submit Ticket Button */
+        .fw-nav-wrapper .btn-primary,
+        .fw-nav-wrapper .btn-outline-primary,
+        .fw-nav-wrapper a[href*="new"] {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            border: none;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(87, 130, 194, 0.3);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .fw-nav-wrapper .btn-primary:hover,
+        .fw-nav-wrapper .btn-outline-primary:hover,
+        .fw-nav-wrapper a[href*="new"]:hover {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-color) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(87, 130, 194, 0.4);
+            color: white;
+        }
+
+        /* User Navigation Dropdown - FIXED */
+        .fw-nav-dropdown-wrapper .dropdown-toggle {
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .fw-nav-dropdown-wrapper .dropdown-toggle:hover {
+            background: var(--accent-color);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        .fw-nav-dropdown-wrapper .dropdown-toggle:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(87, 130, 194, 0.3);
+        }
+
+        .fw-nav-dropdown-wrapper .dropdown-toggle::after {
+            margin-left: 0.5rem;
+        }
+
+        /* Language & User Dropdowns */
+        .fw-nav-dropdown-wrapper .dropdown-menu {
+            border: none;
+            box-shadow: var(--shadow-heavy);
+            border-radius: 12px;
+            padding: 0.5rem;
+            margin-top: 0.5rem;
+            z-index: 1050;
+            min-width: 200px;
+        }
+
+        .fw-nav-dropdown-wrapper .dropdown-item {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .fw-nav-dropdown-wrapper .dropdown-item:hover {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .fw-nav-dropdown-wrapper .dropdown-item:focus {
+            background: var(--accent-color);
+            color: var(--primary-color);
+            outline: none;
+        }
+
+        /* Mobile hamburger menu */
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-toggler:hover {
+            background: var(--accent-color);
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 3px rgba(87, 130, 194, 0.3);
+        }
+
+        /* Enhanced Mobile Navigation */
+        @media (max-width: 1200px) {
+            .navbar-collapse {
+                background: white;
+                border-radius: 12px;
+                box-shadow: var(--shadow-heavy);
+                margin-top: 1rem;
+                padding: 1rem;
+            }
+
+            .navbar-nav .nav-link {
+                padding: 1rem;
+                border-radius: 8px;
+                margin: 0.25rem 0;
+            }
+
+            .navbar-nav .nav-link:not([href*="filecloudonline"]):hover {
+                background: var(--accent-color);
+                transform: translateX(10px);
+            }
+
+            .navbar-nav .nav-item .nav-link[href*="filecloudonline"] {
+                margin: 0.25rem 0;
+                justify-content: center;
+            }
+
+            .fw-nav-dropdown-wrapper {
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid var(--border-color);
+            }
+        }
+
+        /* Navigation overlay for mobile */
+        .nav-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1025;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-overlay:not(.d-none) {
+            opacity: 1;
+        }
+
+        /* Icons for navigation items */
+        .nav-link .icon-home::before { content: '\f015'; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+        .nav-link .icon-knowledge_base::before { content: '\f02d'; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+        .nav-link .icon-tickets::before { content: '\f3ff'; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+        .nav-link .icon-ftp::before { content: '\f0c2'; font-family: "Font Awesome 6 Free"; font-weight: 900; }
+
+        /* Enhanced FTP link styling */
+        .navbar-nav .nav-item .nav-link[href*="filecloudonline"] {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white !important;
+            font-weight: 600;
+            border-radius: 8px;
+            padding: 0.75rem 1.25rem;
+            margin: 0 0.25rem;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            height: auto;
+            line-height: 1.5;
+        }
+
+        .navbar-nav .nav-item .nav-link[href*="filecloudonline"]:hover {
+            background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+            color: white !important;
+        }
+
+        .navbar-nav .nav-item .nav-link[href*="filecloudonline"]::before {
+            content: '\f0c2';
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            margin-right: 0.5rem;
+        }
+
+        /* Ensure FTP link doesn't get overridden by general nav-link styles */
+        .navbar-nav .nav-item .nav-link[href*="filecloudonline"]::after {
+            display: none;
+        }
+
+        /* Enhanced accessibility */
+        .nav-link:focus,
+        .btn:focus,
+        .dropdown-toggle:focus {
+            outline: 2px solid var(--primary-color);
+            outline-offset: 2px;
+        }
+
+        /* Loading states for navigation links */
+        .nav-link.loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .nav-link.loading::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--primary-color);
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 0.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Fix for dropdown positioning */
+        .fw-nav-dropdown-wrapper .dropdown {
+            position: relative;
+        }
+
+        .fw-nav-dropdown-wrapper .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: auto;
+            transform: translateY(8px);
+        }
+
+        /* Demo user profile dropdown for testing */
+        .demo-user-profile {
+            background: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .demo-user-profile:hover {
+            background: var(--accent-color);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        /* Hero Section - positioned after header */
+        .hero {
+            background: linear-gradient(135deg, rgba(87, 130, 194, 0.9) 0%, rgba(87, 130, 194, 0.7) 100%), 
+                        url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover;
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            min-height: 50vh;
+            margin-top: 0;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(87, 130, 194, 0.1) 0%, rgba(87, 130, 194, 0.05) 100%);
+            backdrop-filter: blur(1px);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Breadcrumb styling */
+        .breadcrumb-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: white;
+        }
+
+        /* Knowledge Base header */
+        .kb-header {
+            margin-bottom: 2rem;
+        }
+
+        .kb-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            color: #ffffff;
+        }
+
+        .kb-header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            color: #f8f9fa;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 2rem;
+        }
+
+        /* Search section in hero */
+        .hero-search {
+            max-width: 900px;
+            margin: 0 auto;
+            width: 90%;
+        }
+
+        /* Enhanced search container */
+        .search-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Style the Freshdesk search form */
+        .search-container form,
+        .search-container .fw-search-form {
+            display: flex !important;
+            background: white !important;
+            border-radius: 60px !important;
+            padding: 1.5rem 2.5rem !important;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15) !important;
+            transition: all 0.3s ease !important;
+            max-width: 100% !important;
+            width: 100% !important;
+            margin: 0 auto !important;
+            min-height: 85px !important;
+            align-items: center !important;
+            gap: 1.5rem !important;
+            position: relative !important;
+            z-index: 10 !important;
+            border: none !important;
+            outline: none !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        .search-container form:hover,
+        .search-container .fw-search-form:hover {
+            box-shadow: 0 25px 80px rgba(0,0,0,0.2) !important;
+            transform: translateY(-3px) !important;
+        }
+
+        /* Search input styling */
+        .search-container input[type="text"],
+        .search-container input[type="search"],
+        .search-container .fw-search-input {
+            flex: 1 !important;
+            border: none !important;
+            outline: none !important;
+            font-size: 1.3rem !important;
+            padding: 1.2rem 1.5rem !important;
+            background: transparent !important;
+            color: #333 !important;
+            font-weight: 500 !important;
+            width: 100% !important;
+            min-width: 300px !important;
+            height: auto !important;
+            box-shadow: none !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+            user-select: text !important;
+            -webkit-user-select: text !important;
+        }
+
+        .search-container input[type="text"]::placeholder,
+        .search-container input[type="search"]::placeholder,
+        .search-container .fw-search-input::placeholder {
+            color: #999 !important;
+            font-size: 1.3rem !important;
+        }
+
+        /* Search button styling */
+        .search-container button[type="submit"],
+        .search-container .fw-search-button {
+            background: rgb(87, 130, 194) !important;
+            border: none !important;
+            color: white !important;
+            padding: 1.2rem 2.5rem !important;
+            border-radius: 50px !important;
+            cursor: pointer !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease !important;
+            font-size: 1.2rem !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 0.75rem !important;
+            flex-shrink: 0 !important;
+            min-width: 160px !important;
+            height: auto !important;
+            text-transform: none !important;
+            font-family: inherit !important;
+            outline: none !important;
+            box-shadow: 0 4px 15px rgba(87, 130, 194, 0.3) !important;
+        }
+
+        .search-container button[type="submit"]::before,
+        .search-container .fw-search-button::before {
+            content: "\f002" !important;
+            font-family: "Font Awesome 6 Free" !important;
+            font-weight: 900 !important;
+            font-size: 1.1rem !important;
+            margin-right: 0.5rem !important;
+            display: inline-block !important;
+        }
+
+        .search-container button[type="submit"]:not(.fa-loaded)::before,
+        .search-container .fw-search-button:not(.fa-loaded)::before {
+            content: "?" !important;
+            font-family: system-ui !important;
+            font-weight: normal !important;
+            font-size: 1.1rem !important;
+        }
+
+        .search-container button[type="submit"]:hover,
+        .search-container .fw-search-button:hover {
+            background: rgb(67, 110, 174) !important;
+            transform: translateY(-2px) !important;
+            box-shadow: 0 8px 25px rgba(87, 130, 194, 0.4) !important;
+        }
+
+        /* Hide unwanted search elements */
+        .search-container > span:not(:has(form)):not(:has(input)):not(:has(button)),
+        .search-container > div:empty,
+        .search-container .fw-search-text:not(input):not(button),
+        .search-container .search-text:not(input):not(button),
+        .search-container .fw-search-categories,
+        .search-container .search-categories,
+        .search-container .fw-search-tabs,
+        .search-container .search-tabs,
+        .search-container .fw-search-filters,
+        .search-container .search-filters {
+            display: none !important;
+            visibility: hidden !important;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Main content section */
+        .knowledge-base-content {
+            padding: 4rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.2rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        /* Filter and Sort Section */
+        .fw-filter-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .fw-filter-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .fw-filter-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .fw-filter-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .fw-categories-count {
+            color: rgb(87, 130, 194);
+            font-size: 1rem;
+            font-weight: 600;
+            background: rgba(87, 130, 194, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .fw-filter-input {
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid #e9ecef;
+            border-radius: 30px;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s ease;
+            min-width: 250px;
+            position: relative;
+        }
+
+        .fw-filter-input:focus {
+            outline: none;
+            border-color: rgb(87, 130, 194);
+            box-shadow: 0 0 0 3px rgba(87, 130, 194, 0.1);
+        }
+
+        .fw-filter-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .fw-filter-input-wrapper::before {
+            content: "\f002";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1rem;
+            z-index: 1;
+        }
+
+        .fw-filter-input-wrapper:not(.fa-loaded)::before {
+            content: "?";
+            font-family: system-ui;
+            font-weight: normal;
+        }
+
+        .fw-sort-select {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 30px;
+            font-size: 1rem;
+            background: white;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .fw-sort-select:focus {
+            outline: none;
+            border-color: rgb(87, 130, 194);
+            box-shadow: 0 0 0 3px rgba(87, 130, 194, 0.1);
+        }
+
+        /* View Toggle */
+        .fw-view-toggle {
+            display: flex;
+            background: #f8f9fa;
+            border-radius: 30px;
+            padding: 0.25rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .fw-view-btn {
+            padding: 0.75rem 1rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 25px;
+            color: #666;
+        }
+
+        .fw-view-btn.active {
+            background: rgb(87, 130, 194);
+            color: white;
+            box-shadow: 0 2px 8px rgba(87, 130, 194, 0.3);
+        }
+
+        .fw-view-btn:hover:not(.active) {
+            background: rgba(87, 130, 194, 0.1);
+            color: rgb(87, 130, 194);
+        }
+
+        /* Expand All Button */
+        .expand-all-container {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .fw-expand-all-btn {
+            background: linear-gradient(135deg, rgb(87, 130, 194), rgb(107, 150, 214));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(87, 130, 194, 0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .fw-expand-all-btn:hover {
+            background: linear-gradient(135deg, rgb(67, 110, 174), rgb(87, 130, 194));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(87, 130, 194, 0.4);
+        }
+
+        /* Category Cards */
+        .fw-category-wrapper {
+            background: white;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .fw-category-wrapper:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+
+        .fw-category-header {
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f2ff 100%);
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .fw-category-header:hover {
+            background: linear-gradient(135deg, #e8f2ff 0%, #d8e8ff 100%);
+        }
+
+        .fw-category-main-content {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .fw-category-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .fw-category-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, rgb(87, 130, 194), rgb(107, 150, 214));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 1.5rem;
+            box-shadow: 0 4px 15px rgba(87, 130, 194, 0.3);
+            flex-shrink: 0;
+        }
+
+        .fw-category-info .info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .fw-category-info h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        .fw-category-info p {
+            color: #666;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .fw-category-title-link {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .fw-category-title-link:hover {
+            color: rgb(87, 130, 194);
+        }
+
+        .fw-category-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .fw-view-category-btn {
+            background: rgb(87, 130, 194);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 10px rgba(87, 130, 194, 0.3);
+        }
+
+        .fw-view-category-btn:hover {
+            background: rgb(67, 110, 174);
+            color: white;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(87, 130, 194, 0.4);
+        }
+
+        .fw-category-toggle-btn {
+            background: rgba(87, 130, 194, 0.1);
+            border: 2px solid rgba(87, 130, 194, 0.2);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgb(87, 130, 194);
+        }
+
+        .fw-category-toggle-btn:hover {
+            background: rgba(87, 130, 194, 0.2);
+            border-color: rgba(87, 130, 194, 0.4);
+            transform: scale(1.05);
+        }
+
+        .fw-category-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .fw-category-toggle-btn[data-expanded="true"] .fw-category-toggle {
+            transform: rotate(90deg);
+        }
+
+        /* Collapsible content */
+        .collapse {
+            overflow: hidden;
+            transition: max-height 0.35s ease;
+            max-height: 0;
+        }
+
+        .collapse.show {
+            max-height: 2000px;
+        }
+
+        .fw-category-summary {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            border-left: 4px solid rgb(87, 130, 194);
+            border-radius: 0 8px 8px 0;
+            padding: 1.5rem;
+            margin: 0 2rem 2rem 2rem;
+            font-size: 0.95rem;
+            color: #856404;
+        }
+
+        .fw-section-content {
+            padding: 0 2rem 2rem 2rem;
+            background: #fafbfc;
+        }
+
+        /* Directory Cards */
+        .fw-directory-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            border: 1px solid rgba(87, 130, 194, 0.1);
+        }
+
+        .fw-directory-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateY(-3px);
+            border-color: rgba(87, 130, 194, 0.2);
+        }
+
+        .fw-directory-title {
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .fw-directory-title:hover {
+            color: rgb(87, 130, 194);
+            text-decoration: none;
+        }
+
+        .fw-directory-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 0.75rem;
+            color: rgb(87, 130, 194);
+        }
+
+        .fw-article-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .fw-article-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .fw-article-item:last-child {
+            border-bottom: none;
+        }
+
+        .fw-article-link {
+            color: #555;
+            text-decoration: none;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+
+        .fw-article-link:hover {
+            color: rgb(87, 130, 194);
+            background: rgba(87, 130, 194, 0.05);
+            text-decoration: none;
+            transform: translateX(5px);
+        }
+
+        .fw-view-all {
+            color: rgb(87, 130, 194);
+            font-size: 0.9rem;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .fw-view-all:hover {
+            color: rgb(67, 110, 174);
+            text-decoration: none;
+            transform: translateX(5px);
+        }
+
+        /* Grid view for categories */
+        .fw-grid-view .categories-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .fw-grid-view .fw-category-wrapper {
+            margin-bottom: 0;
+            height: fit-content;
+        }
+
+        /* Row class for Bootstrap compatibility */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+        }
+
+        .g-4 > * {
+            padding: 0 15px;
+            margin-bottom: 30px;
+        }
+
+        .col-lg-4 {
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+        }
+
+        .col-md-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+
+        .col-sm-12 {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+
+        @media (max-width: 992px) {
+            .col-lg-4 {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .col-lg-4,
+            .col-md-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+
+        /* Empty State */
+        .fw-empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .fw-empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: rgb(87, 130, 194);
+            opacity: 0.5;
+        }
+
+        .fw-empty-state h3 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .fw-empty-state p {
+            color: #666;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero {
+                min-height: 45vh;
+                padding: 2rem 0;
+            }
+
+            .kb-header h1 {
+                font-size: 2rem;
+            }
+
+            .kb-header p {
+                font-size: 1rem;
+            }
+
+            .hero-search {
+                width: 95%;
+                margin: 0 auto;
+            }
+
+            .search-container form,
+            .search-container .fw-search-form {
+                flex-direction: row !important;
+                gap: 1rem !important;
+                padding: 1rem 1.5rem !important;
+                max-width: 95% !important;
+                width: 95% !important;
+                min-height: 70px !important;
+                border-radius: 40px !important;
+            }
+
+            .search-container button[type="submit"],
+            .search-container .fw-search-button {
+                border-radius: 35px !important;
+                padding: 0.75rem 1.5rem !important;
+                font-size: 1rem !important;
+                min-width: 120px !important;
+            }
+
+            .search-container input[type="text"],
+            .search-container input[type="search"],
+            .search-container .fw-search-input {
+                font-size: 1rem !important;
+                padding: 0.75rem 1rem !important;
+                min-width: 180px !important;
+            }
+
+            .fw-filter-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .fw-filter-left,
+            .fw-filter-right {
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            .fw-filter-input {
+                min-width: 100%;
+            }
+
+            .fw-filter-input-wrapper {
+                width: 100%;
+            }
+
+            .fw-category-header {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+
+            .fw-category-main-content {
+                flex-direction: column;
+                text-align: center;
+                width: 100%;
+            }
+
+            .fw-category-info {
+                flex-direction: column;
+                text-align: center;
+                width: 100%;
+            }
+
+            .fw-category-icon {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            .fw-category-actions {
+                justify-content: center;
+                width: 100%;
+            }
+
+            .section-header h2 {
+                font-size: 1.8rem;
+            }
+
+            .fw-grid-view .categories-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="breadcrumb-section">
+                <div class="container">
+                    <nav class="breadcrumb">
+                        <a href="{{portal.home_url}}">{{ 'portal_translations.header.tabs.home' | t }}</a>
+                        <span>/</span>
+                        <span>{{ 'portal_translations.header.tabs.solutions' | t }}</span>
+                    </nav>
+                </div>
+            </div>
+            
+            <div class="kb-header">
+                <h1>Knowledge Base</h1>
+                <p>Explore our comprehensive documentation, guides, and resources</p>
+            </div>
+            
+            <div class="hero-search">
+                <div class="search-container">
+                    {{ portal | search_element }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Section -->
+    <section class="knowledge-base-content" id="fw-main-content">
+        <div class="container">
+            {{page_message}}
+            
+            <div class="section-header">
+                <h2>Browse Categories</h2>
+                <p>Find the information you need organized by topic and category</p>
+            </div>
+
+            <!-- Filter and Sort Section -->
+            <div class="fw-filter-section">
+                <div class="fw-filter-controls">
+                    <div class="fw-filter-left">
+                        <span class="fw-categories-count" id="categoriesCount">{{ portal.solution_categories.size }} categories found</span>
+                        <div class="fw-filter-input-wrapper">
+                            <input type="text" class="fw-filter-input" placeholder="Filter categories..." id="categoryFilter">
+                        </div>
+                    </div>
+                    <div class="fw-filter-right">
+                        <select class="fw-sort-select" id="sortSelect">
+                            <option value="name">Sort by Name</option>
+                            <option value="folders">Most Folders</option>
+                            <option value="alphabetical">Alphabetical</option>
+                        </select>
+                        <div class="fw-view-toggle">
+                            <button class="fw-view-btn active" onclick="toggleView('list')" title="List View">
+                                <i class="fas fa-list"></i>
+                            </button>
+                            <button class="fw-view-btn" onclick="toggleView('grid')" title="Grid View">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Expand All Button -->
+            <div class="expand-all-container">
+                <button class="fw-expand-all-btn" onclick="toggleAllCategoriesBootstrap()">
+                    <i class="fas fa-expand-arrows-alt"></i>
+                    <span id="expand-text">Expand All Categories</span>
+                </button>
+            </div>
+            
+            <!-- Categories Container -->
+            <div class="categories-container" id="categoriesContainer">
+                {% for category in portal.solution_categories %}
+                    {% if category.folders_count > 0 %}
+                        <!-- Category Card -->
+                        <div class="fw-category-wrapper fade-in-up" 
+                             data-name="{{ category.name | downcase }}" 
+                             data-folders="{{ category.folders_count }}">
+                            <!-- Category Header -->
+                            <div class="fw-category-header">
+                                <!-- Main Category Content -->
+                                <div class="fw-category-main-content">
+                                    <div class="fw-category-info">
+                                        {% if category.icon %}
+                                            <div class="fw-category-icon">
+                                                <img src="{{category.icon}}" style="width: 30px; height: 30px;">
+                                            </div>
+                                        {% else %}
+                                            <div class="fw-category-icon">
+                                                <i class="fas fa-folder"></i>
+                                            </div>
+                                        {% endif %}
+                                        <div class="info">
+                                            <h2>
+                                                <a href="{{ category.url }}" class="fw-category-title-link">
+                                                    {{ category.name | escape_once }} ({{ category.folders_count }})
+                                                </a>
+                                            </h2>
+                                            <p>{{ category.description }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="fw-category-actions">
+                                    <!-- View Category Button -->
+                                    <a href="{{ category.url }}" class="fw-view-category-btn">
+                                        <i class="fas fa-eye"></i>
+                                        View Category
+                                    </a>
+                                    
+                                    <!-- Expand/Collapse Toggle -->
+                                    <button class="fw-category-toggle-btn" 
+                                            onclick="toggleCategory('category-{{forloop.index}}', this)" 
+                                            type="button"
+                                            data-expanded="false"
+                                            aria-label="Toggle category">
+                                        <div class="fw-category-toggle">▶</div>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Collapsible Content -->
+                            <div class="collapse" id="category-{{forloop.index}}">
+                                <!-- Category Summary -->
+                                <div class="fw-category-summary">
+                                    <strong>{{ category.folders_count }} directories</strong> with documentation and guides. 
+                                    Click to explore available resources and find detailed information.
+                                </div>
+                                
+                                <!-- Directory Cards Grid -->
+                                <div class="fw-section-content">
+                                    <div class="row g-4">
+                                        {% for folder in category.folders %}
+                                            {% if folder.entity_collection.size > 0 %}
+                                                <div class="col-lg-4 col-md-6 col-sm-12">
+                                                    <div class="fw-directory-card">
+                                                        <!-- Directory Header -->
+                                                        <a href="{{ folder.url }}" class="fw-directory-title">
+                                                            {% if folder.icon %}
+                                                                <img src="{{folder.icon}}" class="fw-directory-icon">
+                                                            {% else %}
+                                                                <i class="fas fa-folder-open fw-directory-icon"></i>
+                                                            {% endif %}
+                                                            {{ folder.name | escape_once }} ({{ folder.entity_collection.size }})
+                                                        </a>
+                                                        
+                                                        <!-- Articles List -->
+                                                        <ul class="fw-article-list">
+                                                            {% for entity in folder.entity_collection limit:3 %}
+                                                                <li class="fw-article-item">
+                                                                    <a href="{{ entity.url }}" class="fw-article-link">
+                                                                        {% if entity.icon %}
+                                                                            <img src="{{entity.icon}}" class="fw-directory-icon">
+                                                                        {% else %}
+                                                                            <i class="fas fa-file-alt fw-directory-icon"></i>
+                                                                        {% endif %}
+                                                                        {{ entity.name | escape_once }}
+                                                                    </a>
+                                                                </li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                        
+                                                        <!-- View All Link -->
+                                                        {% if folder.entity_collection.size > 3 %}
+                                                            <div class="mt-3">
+                                                                <a href="{{ folder.url }}" class="fw-view-all">
+                                                                    <i class="fas fa-arrow-right"></i>
+                                                                    {{ 'portal_translations.view_all' | t }} {{folder.entity_collection.size}}
+                                                                </a>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="fw-empty-state">
+                        <div class="fw-empty-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <h3>No Categories Found</h3>
+                        <p>No categories match your current filter. Try adjusting your search criteria.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Freshdesk Footer Integration -->
+    {{ footer }}
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript -->
+    <script>
+        // Freshworks Widget
+        window.fwSettings={
+            'widget_id':33000000647
+        };
+        !function(){if("function"!=typeof window.FreshworksWidget){var n=function(){n.q.push(arguments)};n.q=[],window.FreshworksWidget=n}}() 
+
+        function openFreshdeskWidget() {
+            if (typeof window.FreshworksWidget !== 'undefined') {
+                window.FreshworksWidget('open', 'ticketForm');
+            } else {
+                setTimeout(function() {
+                    if (typeof window.FreshworksWidget !== 'undefined') {
+                        window.FreshworksWidget('open', 'ticketForm');
+                    } else {
+                        window.location.href = '/support/tickets/new';
+                    }
+                }, 2000);
+            }
+        }
+
+        // Initialize Bootstrap dropdowns explicitly
+        document.addEventListener('DOMContentLoaded', function() {
+            // Force initialize all dropdowns
+            var dropdownElementList = [].slice.call(document.querySelectorAll('.dropdown-toggle'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl);
+            });
+            
+            // Additional initialization for Freshdesk generated dropdowns
+            setTimeout(function() {
+                // Re-initialize dropdowns after Freshdesk elements are loaded
+                const freshDropdowns = document.querySelectorAll('.fw-nav-dropdown-wrapper .dropdown-toggle');
+                freshDropdowns.forEach(function(dropdown) {
+                    if (!dropdown.hasAttribute('data-bs-toggle')) {
+                        dropdown.setAttribute('data-bs-toggle', 'dropdown');
+                    }
+                    // Force create Bootstrap dropdown instance
+                    try {
+                        new bootstrap.Dropdown(dropdown);
+                    } catch (e) {
+                        console.warn('Could not initialize dropdown:', e);
+                    }
+                });
+            }, 1000);
+        });
+
+        // Mobile navigation overlay
+        const navToggler = document.querySelector('.navbar-toggler');
+        const navOverlay = document.querySelector('.nav-overlay');
+        const navCollapse = document.querySelector('.navbar-collapse');
+
+        if (navToggler) {
+            navToggler.addEventListener('click', function() {
+                setTimeout(() => {
+                    if (navCollapse.classList.contains('show')) {
+                        navOverlay.classList.remove('d-none');
+                    } else {
+                        navOverlay.classList.add('d-none');
+                    }
+                }, 10);
+            });
+        }
+
+        if (navOverlay) {
+            navOverlay.addEventListener('click', function() {
+                navToggler.click();
+            });
+        }
+
+        // Close mobile nav when clicking on a link
+        document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth < 1200) {
+                    navToggler.click();
+                }
+            });
+        });
+
+        // Loading states for navigation links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                if (this.href && this.href !== '#' && !this.classList.contains('dropdown-toggle')) {
+                    this.classList.add('loading');
+                    setTimeout(() => {
+                        this.classList.remove('loading');
+                    }, 1000);
+                }
+            });
+        });
+
+        // Enhanced search functionality
+        const searchInput = document.querySelector('.header-search input');
+        if (searchInput) {
+            searchInput.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            searchInput.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        }
+
+        // Manual dropdown toggle for troubleshooting
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('dropdown-toggle') || e.target.closest('.dropdown-toggle')) {
+                e.preventDefault();
+                const dropdown = e.target.classList.contains('dropdown-toggle') ? e.target : e.target.closest('.dropdown-toggle');
+                const dropdownMenu = dropdown.nextElementSibling;
+                
+                if (dropdownMenu && dropdownMenu.classList.contains('dropdown-menu')) {
+                    // Close other dropdowns
+                    document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                        if (menu !== dropdownMenu) {
+                            menu.classList.remove('show');
+                        }
+                    });
+                    
+                    // Toggle current dropdown
+                    dropdownMenu.classList.toggle('show');
+                    dropdown.setAttribute('aria-expanded', dropdownMenu.classList.contains('show'));
+                }
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelectorAll('.dropdown-menu.show').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+                document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+                    toggle.setAttribute('aria-expanded', 'false');
+                });
+            }
+        });
+
+        // Filter categories function
+        function filterCategories() {
+            const filterValue = document.getElementById('categoryFilter').value.toLowerCase();
+            const categories = document.querySelectorAll('.fw-category-wrapper');
+            let visibleCount = 0;
+            
+            categories.forEach(category => {
+                const name = category.getAttribute('data-name');
+                const title = category.querySelector('.fw-category-title-link').textContent.toLowerCase();
+                const description = category.querySelector('.fw-category-info p').textContent.toLowerCase();
+                
+                if (name.includes(filterValue) || title.includes(filterValue) || description.includes(filterValue)) {
+                    category.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    category.style.display = 'none';
+                }
+            });
+            
+            // Update count
+            document.getElementById('categoriesCount').textContent = `${visibleCount} categories found`;
+            
+            // Show/hide empty state
+            const emptyState = document.querySelector('.fw-empty-state');
+            if (emptyState) {
+                if (visibleCount === 0) {
+                    emptyState.style.display = 'block';
+                } else {
+                    emptyState.style.display = 'none';
+                }
+            }
+        }
+        
+        // Sort categories function
+        function sortCategories() {
+            const sortValue = document.getElementById('sortSelect').value;
+            const container = document.getElementById('categoriesContainer');
+            const categories = Array.from(container.querySelectorAll('.fw-category-wrapper'));
+            
+            categories.sort((a, b) => {
+                switch(sortValue) {
+                    case 'name':
+                    case 'alphabetical':
+                        return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+                    case 'folders':
+                        return parseInt(b.getAttribute('data-folders')) - parseInt(a.getAttribute('data-folders'));
+                    default:
+                        return 0;
+                }
+            });
+            
+            // Re-append sorted categories
+            categories.forEach(category => container.appendChild(category));
+        }
+        
+        // Toggle view function
+        function toggleView(viewType) {
+            const container = document.querySelector('.knowledge-base-content');
+            const buttons = document.querySelectorAll('.fw-view-btn');
+            
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.closest('.fw-view-btn').classList.add('active');
+            
+            if (viewType === 'grid') {
+                container.classList.add('fw-grid-view');
+            } else {
+                container.classList.remove('fw-grid-view');
+            }
+        }
+
+        // Toggle individual category function
+        function toggleCategory(categoryId, buttonElement) {
+            const targetElement = document.getElementById(categoryId);
+            const isExpanded = targetElement.classList.contains('show');
+            
+            if (isExpanded) {
+                targetElement.classList.remove('show');
+                buttonElement.setAttribute('data-expanded', 'false');
+            } else {
+                targetElement.classList.add('show');
+                buttonElement.setAttribute('data-expanded', 'true');
+            }
+        }
+
+        // Toggle all categories function  
+        function toggleAllCategoriesBootstrap() {
+            const collapseElements = document.querySelectorAll('.collapse');
+            const toggleButtons = document.querySelectorAll('.fw-category-toggle-btn');
+            const expandText = document.getElementById('expand-text');
+            const allExpanded = Array.from(collapseElements).every(el => el.classList.contains('show'));
+            
+            if (allExpanded) {
+                collapseElements.forEach((element, index) => {
+                    element.classList.remove('show');
+                    if (toggleButtons[index]) {
+                        toggleButtons[index].setAttribute('data-expanded', 'false');
+                    }
+                });
+                expandText.innerHTML = 'Expand All Categories';
+            } else {
+                collapseElements.forEach((element, index) => {
+                    element.classList.add('show');
+                    if (toggleButtons[index]) {
+                        toggleButtons[index].setAttribute('data-expanded', 'true');
+                    }
+                });
+                expandText.innerHTML = 'Collapse All Categories';
+            }
+        }
+
+        // Enhanced search functionality
+        function initializeSearchEnhancement() {
+            const searchContainer = document.querySelector('.search-container');
+            if (!searchContainer) return;
+
+            // Clean up unwanted elements including search categories
+            function cleanupSearchContainer() {
+                // Remove empty text nodes
+                for (let node of searchContainer.childNodes) {
+                    if (node.nodeType === 3 && node.textContent.trim() === '') {
+                        node.remove();
+                    }
+                }
+                
+                // Hide search categories and filters
+                const categoriesToHide = [
+                    '.fw-search-categories',
+                    '.search-categories', 
+                    '.fw-search-tabs',
+                    '.search-tabs',
+                    '.fw-search-filters',
+                    '.search-filters',
+                    '.fw-search-scope',
+                    '.search-scope'
+                ];
+                
+                categoriesToHide.forEach(selector => {
+                    const elements = searchContainer.querySelectorAll(selector);
+                    elements.forEach(el => {
+                        el.style.display = 'none';
+                        el.style.visibility = 'hidden';
+                    });
+                });
+            }
+
+            // Check for search elements
+            let attempts = 0;
+            const maxAttempts = 15;
+            
+            const checkSearchElements = () => {
+                attempts++;
+                cleanupSearchContainer();
+                
+                const searchForm = searchContainer.querySelector('form, .fw-search-form');
+                const searchInput = searchContainer.querySelector('input[type="text"], input[type="search"], .fw-search-input');
+                const searchButton = searchContainer.querySelector('button[type="submit"], .fw-search-button');
+                
+                if (searchForm && searchInput && searchButton) {
+                    console.log('Search elements found, enhancing...');
+                    
+                    cleanupSearchContainer();
+                    
+                    // Update button text if needed
+                    if (searchButton.textContent.trim() === '?' || searchButton.textContent.trim() === '' || searchButton.textContent.includes('?')) {
+                        searchButton.textContent = 'Search';
+                    }
+                    
+                    // Add Font Awesome class if available
+                    if (document.body.classList.contains('fa-loaded')) {
+                        searchButton.classList.add('fa-loaded');
+                    }
+                    
+                    // Ensure input functionality
+                    searchInput.disabled = false;
+                    searchInput.readOnly = false;
+                    searchInput.style.pointerEvents = 'auto';
+                    searchInput.style.userSelect = 'text';
+                    
+                    console.log('Search enhancement complete');
+                } else if (attempts < maxAttempts) {
+                    setTimeout(checkSearchElements, 300);
+                } else {
+                    console.warn('Search elements not found after maximum attempts');
+                }
+            };
+            
+            checkSearchElements();
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+        
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Font Awesome detection for search icon
+            const fontAwesome = document.createElement('div');
+            fontAwesome.className = 'fa';
+            document.body.appendChild(fontAwesome);
+            
+            const fontAwesomeLoaded = window.getComputedStyle(fontAwesome, ':before').fontFamily.includes('Font Awesome');
+            if (fontAwesomeLoaded) {
+                document.body.classList.add('fa-loaded');
+                // Also add the class to the filter input wrapper
+                const filterWrapper = document.querySelector('.fw-filter-input-wrapper');
+                if (filterWrapper) {
+                    filterWrapper.classList.add('fa-loaded');
+                }
+            }
+            document.body.removeChild(fontAwesome);
+            
+            // Initialize search enhancement with delays
+            setTimeout(initializeSearchEnhancement, 100);
+            setTimeout(initializeSearchEnhancement, 1000);
+            setTimeout(initializeSearchEnhancement, 2000);
+            
+            // Initialize filter and sort
+            const categoryFilter = document.getElementById('categoryFilter');
+            const sortSelect = document.getElementById('sortSelect');
+            
+            if (categoryFilter) {
+                categoryFilter.addEventListener('input', filterCategories);
+            }
+            
+            if (sortSelect) {
+                sortSelect.addEventListener('change', sortCategories);
+            }
+            
+            // Initialize scroll animations
+            document.querySelectorAll('.fw-category-wrapper').forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                el.style.animationDelay = `${index * 0.1}s`;
+                observer.observe(el);
+            });
+        });
+    </script>
+    <script type='text/javascript' src='https://widget.freshworks.com/widgets/33000000647.js' async defer></script>
+</body>
+</html>
