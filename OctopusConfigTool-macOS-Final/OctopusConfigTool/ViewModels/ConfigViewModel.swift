@@ -731,17 +731,39 @@ class ConfigViewModel: ObservableObject {
         profiles = profileManager.loadAllProfiles()
     }
 
+    /// Returns true when a profile name should be treated as a "basic" profile
+    /// (server credentials and sensitive fields must be stripped before saving).
+    private func isBasicProfileName(_ name: String) -> Bool {
+        name.trimmingCharacters(in: .whitespacesAndNewlines)
+            .caseInsensitiveCompare("basic") == .orderedSame
+    }
+
+    /// Returns a copy of the current config with all sensitive / environment-specific
+    /// fields cleared, suitable for saving as the "basic" template profile.
+    private func configStrippedForBasicProfile() -> OctopusConfig {
+        var stripped = config
+        stripped.server      = ""
+        stripped.domain      = ""
+        stripped.service     = ""
+        stripped.certificate = ""
+        return stripped
+    }
+
     func saveNewProfile(name: String) {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
             showErrorAlert("Profile name cannot be empty.")
             return
         }
-        let profile = Profile(name: trimmed, config: config)
+        let profileConfig = isBasicProfileName(trimmed) ? configStrippedForBasicProfile() : config
+        let profile = Profile(name: trimmed, config: profileConfig)
         do {
             try profileManager.save(profile)
             loadProfiles()
-            showSuccessAlert("Profile '\(trimmed)' saved successfully!")
+            let note = isBasicProfileName(trimmed)
+                ? "Profile '\(trimmed)' saved (server, domain, service key and certificate are not stored in this profile)."
+                : "Profile '\(trimmed)' saved successfully!"
+            showSuccessAlert(note)
         } catch {
             showErrorAlert("Failed to save profile: \(error.localizedDescription)")
         }
@@ -754,12 +776,15 @@ class ConfigViewModel: ObservableObject {
 
     func updateProfile(_ profile: Profile) {
         var updated = profile
-        updated.config = config
+        updated.config = isBasicProfileName(profile.name) ? configStrippedForBasicProfile() : config
         updated.updatedAt = Date()
         do {
             try profileManager.save(updated)
             loadProfiles()
-            showSuccessAlert("Profile '\(profile.name)' updated with current settings!")
+            let note = isBasicProfileName(profile.name)
+                ? "Profile '\(profile.name)' updated (server, domain, service key and certificate are not stored in this profile)."
+                : "Profile '\(profile.name)' updated with current settings!"
+            showSuccessAlert(note)
         } catch {
             showErrorAlert("Failed to update profile: \(error.localizedDescription)")
         }
