@@ -128,12 +128,10 @@ class ConfigViewModel: ObservableObject {
 
     /// Generates XML with Basic mode defaults applied (non-destructive — uses a copy).
     func generateBasicXML() -> String {
-        var basicConfig = config
         let snapshot = config
         applyBasicDefaults()
         let xml = XMLHandler.generateXML(from: config)
         config = snapshot
-        _ = basicConfig // suppress unused warning
         return xml
     }
     

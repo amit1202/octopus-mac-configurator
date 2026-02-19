@@ -204,6 +204,7 @@ struct TopBarView: View {
 struct BasicModeView: View {
     @ObservedObject var viewModel: ConfigViewModel
     @State private var showingImportXML = false
+    @State private var showingXmlPreview = false
 
     var body: some View {
         ScrollView {
@@ -220,7 +221,7 @@ struct BasicModeView: View {
 
                 Divider()
 
-                // Section 1: Import XML
+                // ── Section 1: Import XML ──────────────────────────────────
                 GroupBox {
                     VStack(alignment: .leading, spacing: 12) {
                         Label("Import Configuration XML", systemImage: "square.and.arrow.down")
@@ -264,13 +265,72 @@ struct BasicModeView: View {
                     Rectangle().frame(height: 1).foregroundColor(.secondary.opacity(0.3))
                 }
 
-                // Section 2: Server Connection (reuses the full ServerConnectionView)
+                // ── Section 2: Server Connection ──────────────────────────
                 GroupBox {
                     ServerConnectionView(config: $viewModel.config, viewModel: viewModel)
                         .padding(8)
                 }
 
-                // Info about Basic mode defaults
+                Divider()
+
+                // ── Section 3: XML Preview ────────────────────────────────
+                GroupBox {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Label("XML Preview", systemImage: "doc.text.magnifyingglass")
+                            .font(.headline)
+
+                        Text("Preview the configuration XML that will be generated using Basic mode defaults.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+
+                        DisclosureGroup("Show XML Preview", isExpanded: $showingXmlPreview) {
+                            ScrollView {
+                                Text(viewModel.generateBasicXML())
+                                    .font(.system(.caption, design: .monospaced))
+                                    .textSelection(.enabled)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            .frame(maxHeight: 260)
+                            .background(Color(NSColor.textBackgroundColor))
+                            .clipShape(RoundedRectangle(cornerRadius: 4))
+                            .padding(.top, 6)
+                        }
+
+                        HStack(spacing: 10) {
+                            Button(action: { viewModel.exportXMLWithPanel() }) {
+                                Label("Export XML…", systemImage: "square.and.arrow.up")
+                            }
+                            .buttonStyle(.borderedProminent)
+
+                            Button(action: { viewModel.validateXML() }) {
+                                Label("Validate XML", systemImage: "checkmark.shield")
+                            }
+                            .buttonStyle(.bordered)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(8)
+                }
+
+                Divider()
+
+                // ── Section 4: Deployment ─────────────────────────────────
+                GroupBox {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Label("Deployment", systemImage: "shippingbox.fill")
+                            .font(.headline)
+                        Text("Repackage an Octopus installer with your configuration for MDM distribution.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 4)
+
+                    DeploymentView(config: $viewModel.config, viewModel: viewModel)
+                        .padding(.horizontal, 4)
+                }
+
+                // ── Info note ─────────────────────────────────────────────
                 GroupBox {
                     HStack(alignment: .top, spacing: 10) {
                         Image(systemName: "info.circle.fill")
@@ -279,7 +339,7 @@ struct BasicModeView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Basic Mode Defaults")
                                 .fontWeight(.semibold)
-                            Text("When you export or deploy in Basic mode, all feature settings (Authentication, FileVault, SSO, etc.) will use the recommended defaults. Switch to Advanced mode to customise individual settings.")
+                            Text("All feature settings (Authentication, FileVault, SSO, etc.) use recommended defaults. Switch to Advanced mode to customise individual settings.")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
                         }
